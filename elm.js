@@ -10286,6 +10286,28 @@ Elm.Html.Events.make = function (_elm) {
                                     ,keyCode: keyCode
                                     ,Options: Options};
 };
+Elm.Model = Elm.Model || {};
+Elm.Model.make = function (_elm) {
+   "use strict";
+   _elm.Model = _elm.Model || {};
+   if (_elm.Model.values) return _elm.Model.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var initJobs = _U.list([{id: 0,job: "Bitfountain",description: "Teaching people to code."}]);
+   var initEducation = _U.list([{id: 0,school: "Boston College",description: "Catholic school with a lot of nice buildings."}
+                               ,{id: 1,school: "Boston College",description: "Catholic school with a lot of nice buildings."}]);
+   var init = {education: initEducation,jobs: initJobs};
+   var Job = F3(function (a,b,c) {    return {id: a,job: b,description: c};});
+   var Education = F3(function (a,b,c) {    return {id: a,school: b,description: c};});
+   var Model = F2(function (a,b) {    return {education: a,jobs: b};});
+   return _elm.Model.values = {_op: _op,Model: Model,Education: Education,Job: Job,initEducation: initEducation,initJobs: initJobs,init: init};
+};
 Elm.EducationRow = Elm.EducationRow || {};
 Elm.EducationRow.make = function (_elm) {
    "use strict";
@@ -10297,67 +10319,12 @@ Elm.EducationRow.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var view = function (item) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(item.school)]));};
-   var init = function (id) {    return {id: id,school: "Boston College",description: "Catholic school with a lot of nice buildings."};};
-   var Model = F3(function (a,b,c) {    return {id: a,school: b,description: c};});
-   return _elm.EducationRow.values = {_op: _op,Model: Model,init: init,view: view};
-};
-Elm.JobRow = Elm.JobRow || {};
-Elm.JobRow.make = function (_elm) {
-   "use strict";
-   _elm.JobRow = _elm.JobRow || {};
-   if (_elm.JobRow.values) return _elm.JobRow.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var view = function (item) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(item.job)]));};
-   var init = function (id) {    return {id: id,job: "Bitfountain",description: "Teaching people to code."};};
-   var Model = F3(function (a,b,c) {    return {id: a,job: b,description: c};});
-   return _elm.JobRow.values = {_op: _op,Model: Model,init: init,view: view};
-};
-Elm.EducationView = Elm.EducationView || {};
-Elm.EducationView.make = function (_elm) {
-   "use strict";
-   _elm.EducationView = _elm.EducationView || {};
-   if (_elm.EducationView.values) return _elm.EducationView.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $EducationRow = Elm.EducationRow.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $JobRow = Elm.JobRow.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var view = function (items) {
-      var rows = A2($List.map,function (row) {    return $EducationRow.view(row.row);},items.education);
-      return A2($Html.div,_U.list([]),_U.list([A2($Html.ul,_U.list([]),rows)]));
-   };
-   var UpdateField = {ctor: "UpdateField"};
-   var NoOp = {ctor: "NoOp"};
-   var initJobs = _U.list([{id: 0,row: $JobRow.init(0)},{id: 1,row: $JobRow.init(1)}]);
-   var initEducation = _U.list([{id: 0,row: $EducationRow.init(0)},{id: 1,row: $EducationRow.init(1)}]);
-   var init = {education: initEducation,jobs: initJobs};
-   var Model = F2(function (a,b) {    return {education: a,jobs: b};});
-   return _elm.EducationView.values = {_op: _op
-                                      ,Model: Model
-                                      ,initEducation: initEducation
-                                      ,initJobs: initJobs
-                                      ,init: init
-                                      ,NoOp: NoOp
-                                      ,UpdateField: UpdateField
-                                      ,view: view};
+   return _elm.EducationRow.values = {_op: _op,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -10367,15 +10334,19 @@ Elm.Main.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
-   $EducationView = Elm.EducationView.make(_elm),
+   $EducationRow = Elm.EducationRow.make(_elm),
    $Html = Elm.Html.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var init = $EducationView.init;
-   var view = $EducationView.view(init);
-   var main = view;
-   return _elm.Main.values = {_op: _op,init: init,view: view,main: main};
+   var createTable = function (rows) {    return A2($Html.ul,_U.list([]),rows);};
+   var view = function (items) {
+      var educationTable = createTable(A2($List.map,function (data) {    return $EducationRow.view(data);},items.education));
+      return A2($Html.div,_U.list([]),_U.list([educationTable]));
+   };
+   var main = view($Model.init);
+   return _elm.Main.values = {_op: _op,createTable: createTable,view: view,main: main};
 };
