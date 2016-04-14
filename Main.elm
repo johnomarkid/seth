@@ -9,8 +9,11 @@ import EducationView
 -- Model
 
 
-type alias Model =
-  List String
+type alias Model = EducationView.Model
+
+
+init : Model
+init = EducationView.init
 
 
 
@@ -20,8 +23,11 @@ type alias Model =
 
 view : Html
 view =
-  EducationView.view
-
+  EducationView.view init
 
 
 -- Boilerplate
+
+
+main =
+  view

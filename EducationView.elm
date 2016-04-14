@@ -3,21 +3,61 @@ module EducationView (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import EducationRow
+import JobRow
 
 
 -- Model
+-- create a dict of vals that will represent the different types of rows.
+-- each one is a list of rows. rows are all that really change.
 
 
 type alias Model =
-  { school : String
-  , description : String
+  { education : Education
+  , jobs : Jobs
   }
+
+
+type alias Education =
+  List
+    { id : Int
+    , row : EducationRow.Model
+    }
+
+
+type alias Jobs =
+  List
+    { id : Int
+    , row : JobRow.Model
+    }
+
+
+initEducation : Education
+initEducation =
+  [ { id = 0
+    , row = EducationRow.init 0
+    }
+  , { id = 1
+    , row = EducationRow.init 1
+    }
+  ]
+
+
+initJobs : Jobs
+initJobs =
+  [ { id = 0
+    , row = JobRow.init 0
+    }
+  , { id = 1
+    , row = JobRow.init 1
+    }
+  ]
 
 
 init : Model
 init =
-  { school = "Boston College"
-  , description = "Catholic school with a lot of nice buildings."
+  { education = initEducation
+  , jobs = initJobs
   }
 
 
@@ -33,12 +73,19 @@ type Action
 
 -- View
 
+createTable : List Html -> Html
+createTable rows =
+  ul [] rows
 
-view : Html
-view =
-  div
-    []
-    [ ul
-        []
-        [ li [] [ text "here's line 1" ] ]
-    ]
+
+view : Model -> Html
+view items =
+  let
+    -- cycle through each dict value and send list of rows to table
+    educationTable =
+      List.map (\data -> createTable EducationRow.view data.row) items.education
+  in
+    div
+      []
+      [ educationTable
+      ]

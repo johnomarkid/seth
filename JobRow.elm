@@ -1,13 +1,12 @@
-module EducationRow (..) where
+module JobRow (..) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
-
 type alias Model =
   { id : Int
-  , school : String
+  , job : String
   , description : String
   }
 
@@ -15,10 +14,10 @@ type alias Model =
 init : Int -> Model
 init id =
   { id = id
-  , school = "Boston College"
-  , description = "Catholic school with a lot of nice buildings."
+  , job = "Bitfountain"
+  , description = "Teaching people to code."
   }
 
 view : Model -> Html
 view item =
-  li [] [text item.school]
+  li [] [text item.job]
