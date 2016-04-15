@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
+
 type alias Model =
   { id : Int
   , job : String
@@ -18,6 +19,7 @@ init id =
   , description = "Teaching people to code."
   }
 
+
 view : Model -> Html
 view item =
-  li [] [text item.job]
+  li [] [ text item.job ]

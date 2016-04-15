@@ -3,7 +3,9 @@ module Main (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Model
+import StartApp.Simple exposing (start)
+import Model exposing (Model)
+import Update exposing (Action)
 import EducationRow
 
 
@@ -17,7 +19,7 @@ createTable rows =
   ul [] rows
 
 
-view : Model.Model -> Html
+view : Signal.Address Action -> Model -> Html
 view items =
   let
     -- cycle through each dict value and send list of rows to table
@@ -35,4 +37,8 @@ view items =
 
 
 main =
-  view Model.init
+  StartApp.Simple.start
+    { model = Model.init
+    , update = Update.update
+    , view = view
+    }
