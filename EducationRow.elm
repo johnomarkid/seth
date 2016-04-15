@@ -3,23 +3,36 @@ module EducationRow (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Model exposing (Model)
+import Update
 
 
-type alias Model =
-  { id : Int
-  , school : String
-  , description : String
-  }
+view : Signal.Address Update.Action -> Model.Education -> Html
+view address item =
+  li
+    []
+    [ span
+        []
+        [ input
+            [ value item.school
+              --, on "input" targetValue (\v -> Signal.message address v)
+            , inputStyle
+            ]
+            []
+        , button [ onClick address (Update.Remove item.id) ] [ text "delete" ]
+        ]
+    ]
 
 
-init : Int -> Model
-init id =
-  { id = id
-  , school = "Boston College"
-  , description = "Catholic school with a lot of nice buildings."
-  }
+liStyle : Attribute
+liStyle =
+  style
+    [ ( "font-size", "20px" ) ]
 
 
-view : Model -> Html
-view item =
-  li [] [ text item.school ]
+inputStyle : Attribute
+inputStyle =
+  style
+    [ ( "border", "0" )
+    , ( "appearance", "none" )
+    ]

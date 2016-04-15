@@ -7,6 +7,7 @@ import StartApp.Simple exposing (start)
 import Model exposing (Model)
 import Update exposing (Action)
 import EducationRow
+import JobRow
 
 
 -- Updates
@@ -14,9 +15,12 @@ import EducationRow
 -- put table in a div and style it all.
 
 
-createTable : List Html -> Html
-createTable rows =
-  ul [] rows
+createTable : Signal.Address Action -> List Html -> Html
+createTable address rows =
+  div
+    []
+    [ ul [ ulStyle ] rows
+    ]
 
 
 view : Signal.Address Action -> Model -> Html
@@ -24,12 +28,25 @@ view address items =
   let
     -- cycle through each dict value and send list of rows to table
     educationTable =
-      List.map (\data -> EducationRow.view data) items.education
-        |> createTable
+      List.map (\data -> EducationRow.view address data) items.education
+        |> createTable address
+
+    -- jobTable =
+    --   List.map (\data -> JobRow.view data) items.jobs
+    --     |> createTable address
   in
     div
       []
-      [ educationTable ]
+      [ educationTable
+      , button [ onClick address Update.Add ] [ text "add new" ]
+        --  , jobTable
+      ]
+
+
+ulStyle : Attribute
+ulStyle =
+  style
+    [ ( "list-style", "none" ) ]
 
 
 
