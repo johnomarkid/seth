@@ -20,7 +20,7 @@ createTable rows =
 
 
 view : Signal.Address Action -> Model -> Html
-view items =
+view address items =
   let
     -- cycle through each dict value and send list of rows to table
     educationTable =
