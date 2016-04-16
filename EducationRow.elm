@@ -36,3 +36,14 @@ inputStyle =
     [ ( "border", "0" )
     , ( "appearance", "none" )
     ]
+
+
+{-
+
+to learn:
+
+1) how to update input with targetValue
+2) how to style hover states and stuff
+
+
+}
