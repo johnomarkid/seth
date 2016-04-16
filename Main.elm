@@ -4,49 +4,67 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import StartApp.Simple exposing (start)
-import Model exposing (Model)
-import Update exposing (Action)
-import EducationRow
+import Education
 import JobRow
 
 
--- Updates
+-- Model
+
+
+type alias Model =
+  { education : Education.Model
+  , jobs : List JobRow.Model
+  }
+
+
+init : Model
+init =
+  { education = Education.model
+  , jobs = []
+  }
+
+
+
+-- Update
+
+
+type alias ID =
+  Int
+
+
+type Action
+  = NoOp
+  | EducationAction Education.Action
+
+
+update : Action -> Model -> Model
+update action model =
+  case action of
+    NoOp ->
+      model
+
+    EducationAction subAction ->
+      let
+        updatedEd =
+          Education.update subAction model.education
+      in
+        { model | education = updatedEd }
+
+
+
 -- View
 -- put table in a div and style it all.
-
-
-createTable : Signal.Address Action -> List Html -> Html
-createTable address rows =
-  div
-    []
-    [ ul [ ulStyle ] rows
-    ]
 
 
 view : Signal.Address Action -> Model -> Html
 view address items =
   let
-    -- cycle through each dict value and send list of rows to table
     educationTable =
-      List.map (\data -> EducationRow.view address data) items.education
-        |> createTable address
-
-    -- jobTable =
-    --   List.map (\data -> JobRow.view data) items.jobs
-    --     |> createTable address
+      Education.view (Signal.forwardTo address EducationAction) items.education
   in
     div
       []
-      [ educationTable
-      , button [ onClick address Update.Add ] [ text "add new" ]
-        --  , jobTable
-      ]
-
-
-ulStyle : Attribute
-ulStyle =
-  style
-    [ ( "list-style", "none" ) ]
+      [ educationTable ]
 
 
 
@@ -55,7 +73,7 @@ ulStyle =
 
 main =
   StartApp.Simple.start
-    { model = Model.init
-    , update = Update.update
+    { model = init
+    , update = update
     , view = view
     }
