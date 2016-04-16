@@ -4,10 +4,24 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Model exposing (Model)
-import Update
 
 
-view : Signal.Address Update.Action -> Model.Education -> Html
+type Action
+  = Update
+  | Remove Int
+
+
+update : Action -> Model.Education -> Model
+update action model =
+  case action of
+    Update ->
+      model
+
+    Remove id ->
+      model
+
+
+view : Signal.Address Action -> Model.Education -> Html
 view address item =
   li
     []
@@ -16,10 +30,12 @@ view address item =
         [ input
             [ value item.school
               --, on "input" targetValue (\v -> Signal.message address v)
+              --, on "input" targetValue (address (Update item.id))
             , inputStyle
             ]
             []
-        , button [ onClick address (Update.Remove item.id) ] [ text "delete" ]
+        , div [] [ text "hey" ]
+        , button [ onClick address (Remove item.id) ] [ text "delete" ]
         ]
     ]
 
@@ -36,6 +52,7 @@ inputStyle =
     [ ( "border", "0" )
     , ( "appearance", "none" )
     ]
+
 
 
 {-

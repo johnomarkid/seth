@@ -1,6 +1,7 @@
 module Update (..) where
 
 import Model exposing (Model)
+import EducationRow
 
 
 type alias ID =
@@ -11,6 +12,8 @@ type Action
   = NoOp
   | Add
   | Remove ID
+  | UpdateText ID
+  | EducationAction EducationRow.Action
 
 
 
@@ -52,3 +55,16 @@ update action model =
           List.filter (\data -> data.id /= id) model.education
       in
         { model | education = newEd }
+
+    UpdateText id ->
+      model
+
+    EducationAction subAction ->
+      let
+        updatedEd =
+          EducationRow.update subAction (Model.initEducation 2)
+
+        newEd =
+          updatedEd :: model.education
+      in
+        { model | education = updatedEd }
