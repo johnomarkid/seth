@@ -5,7 +5,6 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import StartApp.Simple exposing (start)
 import Education
-import JobRow
 
 
 -- Model
@@ -13,7 +12,7 @@ import JobRow
 
 type alias Model =
   { education : Education.Model
-  , jobs : List JobRow.Model
+  , jobs : List String 
   }
 
 
