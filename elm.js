@@ -10342,6 +10342,30 @@ Elm.Utils.make = function (_elm) {
    };
    return _elm.Utils.values = {_op: _op,fromJust: fromJust};
 };
+Elm.Styles = Elm.Styles || {};
+Elm.Styles.make = function (_elm) {
+   "use strict";
+   _elm.Styles = _elm.Styles || {};
+   if (_elm.Styles.values) return _elm.Styles.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var titleFont = _U.list([{ctor: "_Tuple2",_0: "font-family",_1: "futura, sans-serif"}
+                           ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
+                           ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}]);
+   var inputStyle = _U.list([{ctor: "_Tuple2",_0: "border",_1: "none"}
+                            ,{ctor: "_Tuple2",_0: "appearance",_1: "none"}
+                            ,{ctor: "_Tuple2",_0: "background-color",_1: "rgba(0, 0, 0, 0)"}]);
+   var ulStyle = _U.list([{ctor: "_Tuple2",_0: "list-style",_1: "none"}]);
+   var panelBackground = _U.list([{ctor: "_Tuple2",_0: "background-color",_1: "#F8F8F8"}
+                                 ,{ctor: "_Tuple2",_0: "box-shadow",_1: "0px 1px 4px rgba(209, 202, 202, 0.5)"}]);
+   return _elm.Styles.values = {_op: _op,panelBackground: panelBackground,ulStyle: ulStyle,inputStyle: inputStyle,titleFont: titleFont};
+};
 Elm.Education = Elm.Education || {};
 Elm.Education.make = function (_elm) {
    "use strict";
@@ -10357,11 +10381,9 @@ Elm.Education.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var inputStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: "0"},{ctor: "_Tuple2",_0: "appearance",_1: "none"}]));
-   var liStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "font-size",_1: "20px"}]));
-   var ulStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "list-style",_1: "none"}]));
    var initEducation = function (id) {    return {id: id,school: "Boston College",description: "Catholic school with a lot of nice buildings."};};
    var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
@@ -10394,7 +10416,7 @@ Elm.Education.make = function (_elm) {
                       function (v) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{school: v}),v));
                       })
-                      ,inputStyle]),
+                      ,$Html$Attributes.style(A2($Basics._op["++"],$Styles.inputStyle,$Styles.titleFont))]),
               _U.list([]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.value(item.description)
@@ -10404,15 +10426,16 @@ Elm.Education.make = function (_elm) {
                       function (v) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{description: v}),v));
                       })
-                      ,inputStyle]),
+                      ,$Html$Attributes.style($Styles.inputStyle)]),
               _U.list([]))
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]))]));
    });
    var view = F2(function (address,items) {
       var rows = A2($List.map,educationRow(address),items);
       return A2($Html.div,
-      _U.list([]),
-      _U.list([A2($Html.ul,_U.list([ulStyle]),rows),A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]));
+      _U.list([$Html$Attributes.style($Styles.panelBackground)]),
+      _U.list([A2($Html.ul,_U.list([$Html$Attributes.style($Styles.ulStyle)]),rows)
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]));
    });
    return _elm.Education.values = {_op: _op
                                   ,Update: Update
@@ -10423,10 +10446,7 @@ Elm.Education.make = function (_elm) {
                                   ,model: model
                                   ,update: update
                                   ,educationRow: educationRow
-                                  ,view: view
-                                  ,ulStyle: ulStyle
-                                  ,liStyle: liStyle
-                                  ,inputStyle: inputStyle};
+                                  ,view: view};
 };
 Elm.WorkExperience = Elm.WorkExperience || {};
 Elm.WorkExperience.make = function (_elm) {

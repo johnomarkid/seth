@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Utils
+import Styles
 
 
 type Action
@@ -81,7 +82,7 @@ educationRow address item =
                 "input"
                 targetValue
                 (\v -> Signal.message address (Update { item | school = v } v))
-            , inputStyle
+            , style (Styles.inputStyle ++ Styles.titleFont)
             ]
             []
         , input
@@ -90,7 +91,7 @@ educationRow address item =
                 "input"
                 targetValue
                 (\v -> Signal.message address (Update { item | description = v } v))
-            , inputStyle
+            , style Styles.inputStyle
             ]
             []
         , button [ onClick address (Remove item.id) ] [ text "delete" ]
@@ -105,30 +106,10 @@ view address items =
       List.map (educationRow address) items
   in
     div
-      []
-      [ ul [ ulStyle ] rows
+      [ style Styles.panelBackground ]
+      [ ul [ style Styles.ulStyle ] rows
       , button [ onClick address Add ] [ text "add new" ]
       ]
-
-
-ulStyle : Attribute
-ulStyle =
-  style
-    [ ( "list-style", "none" ) ]
-
-
-liStyle : Attribute
-liStyle =
-  style
-    [ ( "font-size", "20px" ) ]
-
-
-inputStyle : Attribute
-inputStyle =
-  style
-    [ ( "border", "0" )
-    , ( "appearance", "none" )
-    ]
 
 
 
