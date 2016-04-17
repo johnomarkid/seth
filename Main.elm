@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import StartApp.Simple exposing (start)
 import Education
+import WorkExperience
 
 
 -- Model
@@ -12,14 +13,14 @@ import Education
 
 type alias Model =
   { education : Education.Model
-  , jobs : List String 
+  , jobs : WorkExperience.Model
   }
 
 
 init : Model
 init =
   { education = Education.model
-  , jobs = []
+  , jobs = WorkExperience.model
   }
 
 
@@ -34,6 +35,7 @@ type alias ID =
 type Action
   = NoOp
   | EducationAction Education.Action
+  | WorkExperienceAction WorkExperience.Action
 
 
 update : Action -> Model -> Model
@@ -49,6 +51,13 @@ update action model =
       in
         { model | education = updatedEd }
 
+    WorkExperienceAction subAction ->
+      let
+        updatedWork =
+          WorkExperience.update subAction model.jobs
+      in
+        { model | jobs = updatedWork }
+
 
 
 -- View
@@ -60,10 +69,15 @@ view address items =
   let
     educationTable =
       Education.view (Signal.forwardTo address EducationAction) items.education
+
+    workExperienceTable =
+      WorkExperience.view (Signal.forwardTo address WorkExperienceAction) items.jobs
   in
     div
       []
-      [ educationTable ]
+      [ educationTable
+      , workExperienceTable
+      ]
 
 
 

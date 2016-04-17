@@ -10428,24 +10428,91 @@ Elm.Education.make = function (_elm) {
                                   ,liStyle: liStyle
                                   ,inputStyle: inputStyle};
 };
-Elm.JobRow = Elm.JobRow || {};
-Elm.JobRow.make = function (_elm) {
+Elm.WorkExperience = Elm.WorkExperience || {};
+Elm.WorkExperience.make = function (_elm) {
    "use strict";
-   _elm.JobRow = _elm.JobRow || {};
-   if (_elm.JobRow.values) return _elm.JobRow.values;
+   _elm.WorkExperience = _elm.WorkExperience || {};
+   if (_elm.WorkExperience.values) return _elm.WorkExperience.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var view = function (item) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(item.job)]));};
-   var initJobs = function (newID) {    return {id: newID,job: "Bitfountain",description: "Teaching people to code."};};
-   var Model = F3(function (a,b,c) {    return {id: a,job: b,description: c};});
-   return _elm.JobRow.values = {_op: _op,Model: Model,initJobs: initJobs,view: view};
+   var inputStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: "0"},{ctor: "_Tuple2",_0: "appearance",_1: "none"}]));
+   var liStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "font-size",_1: "20px"}]));
+   var ulStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "list-style",_1: "none"}]));
+   var initJob = function (id) {    return {id: id,company: "Bitfountain",description: "Teaching the world education."};};
+   var model = _U.list([initJob(0)]);
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "Update": var _p1 = _p0._0;
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p1.id) ? _p1 : v;},model);
+           return newModel;
+         case "Remove": var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p0._0);},model);
+           return removeModel;
+         default: var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
+           var newModel = A2($List._op["::"],initJob(lastID + 1),model);
+           return newModel;}
+   });
+   var Job = F3(function (a,b,c) {    return {id: a,company: b,description: c};});
+   var Add = {ctor: "Add"};
+   var Remove = function (a) {    return {ctor: "Remove",_0: a};};
+   var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
+   var jobRow = F2(function (address,item) {
+      return A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.span,
+      _U.list([]),
+      _U.list([$Html.text(A2($Basics._op["++"],"id: ",A2($Basics._op["++"],$Basics.toString(item.id),"   ")))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.value(item.company)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{company: v}),v));
+                      })
+                      ,inputStyle]),
+              _U.list([]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.value(item.description)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{description: v}),v));
+                      })
+                      ,inputStyle]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]))]));
+   });
+   var view = F2(function (address,items) {
+      var rows = A2($List.map,jobRow(address),items);
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.ul,_U.list([ulStyle]),rows),A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]));
+   });
+   return _elm.WorkExperience.values = {_op: _op
+                                       ,Update: Update
+                                       ,Remove: Remove
+                                       ,Add: Add
+                                       ,Job: Job
+                                       ,initJob: initJob
+                                       ,model: model
+                                       ,update: update
+                                       ,jobRow: jobRow
+                                       ,view: view
+                                       ,ulStyle: ulStyle
+                                       ,liStyle: liStyle
+                                       ,inputStyle: inputStyle};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
@@ -10457,30 +10524,40 @@ Elm.Main.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $Education = Elm.Education.make(_elm),
    $Html = Elm.Html.make(_elm),
-   $JobRow = Elm.JobRow.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $StartApp$Simple = Elm.StartApp.Simple.make(_elm);
+   $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
+   $WorkExperience = Elm.WorkExperience.make(_elm);
    var _op = {};
    var update = F2(function (action,model) {
       var _p0 = action;
-      if (_p0.ctor === "NoOp") {
-            return model;
-         } else {
-            var updatedEd = A2($Education.update,_p0._0,model.education);
-            return _U.update(model,{education: updatedEd});
-         }
+      switch (_p0.ctor)
+      {case "NoOp": return model;
+         case "EducationAction": var updatedEd = A2($Education.update,_p0._0,model.education);
+           return _U.update(model,{education: updatedEd});
+         default: var updatedWork = A2($WorkExperience.update,_p0._0,model.jobs);
+           return _U.update(model,{jobs: updatedWork});}
    });
+   var WorkExperienceAction = function (a) {    return {ctor: "WorkExperienceAction",_0: a};};
    var EducationAction = function (a) {    return {ctor: "EducationAction",_0: a};};
    var view = F2(function (address,items) {
+      var workExperienceTable = A2($WorkExperience.view,A2($Signal.forwardTo,address,WorkExperienceAction),items.jobs);
       var educationTable = A2($Education.view,A2($Signal.forwardTo,address,EducationAction),items.education);
-      return A2($Html.div,_U.list([]),_U.list([educationTable]));
+      return A2($Html.div,_U.list([]),_U.list([educationTable,workExperienceTable]));
    });
    var NoOp = {ctor: "NoOp"};
-   var init = {education: $Education.model,jobs: _U.list([])};
+   var init = {education: $Education.model,jobs: $WorkExperience.model};
    var main = $StartApp$Simple.start({model: init,update: update,view: view});
    var Model = F2(function (a,b) {    return {education: a,jobs: b};});
-   return _elm.Main.values = {_op: _op,Model: Model,init: init,NoOp: NoOp,EducationAction: EducationAction,update: update,view: view,main: main};
+   return _elm.Main.values = {_op: _op
+                             ,Model: Model
+                             ,init: init
+                             ,NoOp: NoOp
+                             ,EducationAction: EducationAction
+                             ,WorkExperienceAction: WorkExperienceAction
+                             ,update: update
+                             ,view: view
+                             ,main: main};
 };
