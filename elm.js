@@ -10394,11 +10394,14 @@ Elm.Education.make = function (_elm) {
            return newModel;
          case "Remove": var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p0._0);},model);
            return removeModel;
-         default: var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
+         case "Add": var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
-           return newModel;}
+           return newModel;
+         default: var sign = A2($Debug.log,"hover action","we hovering");
+           return model;}
    });
    var Education = F3(function (a,b,c) {    return {id: a,school: b,description: c};});
+   var Hover = {ctor: "Hover"};
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
@@ -10416,7 +10419,8 @@ Elm.Education.make = function (_elm) {
                       function (v) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{school: v}),v));
                       })
-                      ,$Html$Attributes.style(A2($Basics._op["++"],$Styles.inputStyle,$Styles.titleFont))]),
+                      ,$Html$Attributes.style(A2($Basics._op["++"],$Styles.inputStyle,$Styles.titleFont))
+                      ,A2($Html$Events.onMouseOver,address,Hover)]),
               _U.list([]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.value(item.description)
@@ -10441,6 +10445,7 @@ Elm.Education.make = function (_elm) {
                                   ,Update: Update
                                   ,Remove: Remove
                                   ,Add: Add
+                                  ,Hover: Hover
                                   ,Education: Education
                                   ,initEducation: initEducation
                                   ,model: model
