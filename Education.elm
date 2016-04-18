@@ -11,7 +11,6 @@ type Action
   = Update Education String
   | Remove Int
   | Add
-  | Hover
 
 
 type alias Model =
@@ -69,13 +68,6 @@ update action model =
       in
         newModel
 
-    Hover ->
-      let
-        sign =
-          Debug.log "hover action" "we hovering"
-      in
-        model
-
 
 educationRow : Signal.Address Action -> Education -> Html
 educationRow address item =
@@ -91,7 +83,6 @@ educationRow address item =
                 targetValue
                 (\v -> Signal.message address (Update { item | school = v } v))
             , style (Styles.inputStyle ++ Styles.titleFont)
-            , onMouseOver address Hover
             ]
             []
         , input
@@ -130,6 +121,8 @@ to learn:
 use Html.Events to update state. Maybe put styles in the model to update them?
 But what happens when I update a style like inputBackground and it changes all of them,
 not just the one hovered on?
+
+Use elm-css because it has everything i want and it makes css type checked.
 
 
 2) abstract update function to apply to all tables. can use input field name to equal
