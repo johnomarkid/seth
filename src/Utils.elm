@@ -1,5 +1,6 @@
 module Utils (..) where
 
+
 fromJust : Maybe a -> a
 fromJust x =
   case x of
