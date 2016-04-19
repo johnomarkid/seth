@@ -24,7 +24,7 @@ type alias Education =
 initEducation : Int -> Education
 initEducation id =
   { id = id
-  , school = "Boston College"
+  , school = "Boston University"
   , description = "Catholic school with a lot of nice buildings."
   }
 

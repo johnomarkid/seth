@@ -10337,7 +10337,7 @@ Elm.Utils.make = function (_elm) {
       if (_p0.ctor === "Just") {
             return _p0._0;
          } else {
-            return _U.crashCase("Utils",{start: {line: 5,column: 3},end: {line: 10,column: 44}},_p0)("error: fromJust Nothing");
+            return _U.crashCase("Utils",{start: {line: 6,column: 3},end: {line: 11,column: 44}},_p0)("error: fromJust Nothing");
          }
    };
    return _elm.Utils.values = {_op: _op,fromJust: fromJust};
@@ -10384,7 +10384,7 @@ Elm.Education.make = function (_elm) {
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var initEducation = function (id) {    return {id: id,school: "Boston College",description: "Catholic school with a lot of nice buildings."};};
+   var initEducation = function (id) {    return {id: id,school: "Boston University",description: "Catholic school with a lot of nice buildings."};};
    var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
       var _p0 = action;
