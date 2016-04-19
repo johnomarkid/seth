@@ -4,7 +4,12 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Utils
-import Styles
+import Html.CssHelpers
+import MyCss
+
+
+{ id, class, classList } =
+  Html.CssHelpers.withNamespace "seth"
 
 
 type Action
@@ -24,7 +29,7 @@ type alias Education =
 initEducation : Int -> Education
 initEducation id =
   { id = id
-  , school = "Boston University"
+  , school = "New University"
   , description = "Catholic school with a lot of nice buildings."
   }
 
@@ -82,16 +87,19 @@ educationRow address item =
                 "input"
                 targetValue
                 (\v -> Signal.message address (Update { item | school = v } v))
-            , style (Styles.inputStyle ++ Styles.titleFont)
+              --, style (Styles.inputStyle ++ Styles.titleFont)
             ]
             []
         , input
-            [ value item.description
+            [ class
+                [ MyCss.HiddenInput ]
+            , value
+                item.description
             , on
                 "input"
                 targetValue
                 (\v -> Signal.message address (Update { item | description = v } v))
-            , style Styles.inputStyle
+              --  , style Styles.inputStyle
             ]
             []
         , button [ onClick address (Remove item.id) ] [ text "delete" ]
@@ -106,8 +114,8 @@ view address items =
       List.map (educationRow address) items
   in
     div
-      [ style Styles.panelBackground ]
-      [ ul [ style Styles.ulStyle ] rows
+      [ class [ MyCss.Panel ] ]
+      [ ul [] rows
       , button [ onClick address Add ] [ text "add new" ]
       ]
 

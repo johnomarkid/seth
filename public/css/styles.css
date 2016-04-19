@@ -1,0 +1,9 @@
+input {
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.sethPanel {
+    background-color: #F8F8F8;
+    padding: 20px;
+}
