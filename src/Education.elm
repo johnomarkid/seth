@@ -70,71 +70,39 @@ update action model =
         newModel
 
 
-itemRow : Signal.Address Action -> String -> Html
-itemRow address item =
+educationRow : Signal.Address Action -> Education -> Html
+educationRow address item =
   li
-    []
+    [ style Styles.panelLine ]
     [ input
         [ style Styles.panelItemHeader
-        , value item.item
+        , value item.school
         , on
             "input"
             targetValue
-            (\v -> Signal.message address (Update { item | item = v } v))
+            (\v -> Signal.message address (Update { item | school = v } v))
         ]
         []
+    , input
+        [ style Styles.panelDescription
+        , value item.description
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | description = v } v))
+        ]
+        []
+    , input
+        [ style Styles.panelDescription
+        , value item.timespan
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | timespan = v } v))
+        ]
+        []
+    , button [ onClick address (Remove item.id) ] [ text "delete" ]
     ]
-
-
-educationRow : Signal.Address Action -> Education -> Html
-educationRow address item =
-  let
-    fields : List String
-    fields =
-      [ "school", "description", "timespan" ]
-
-    rows =
-      List.map (\v -> itemRow address item.v) fields
-  in
-    li
-      [ style Styles.panelLine ]
-      [ ul [] rows ]
-
-
-
--- educationRow : Signal.Address Action -> Education -> Html
--- educationRow address item =
---   li
---     [ style Styles.panelLine ]
---     [ input
---         [ style Styles.panelItemHeader
---         , value item.school
---         , on
---             "input"
---             targetValue
---             (\v -> Signal.message address (Update { item | school = v } v))
---         ]
---         []
---     , input
---         [ style Styles.panelDescription
---         , value item.description
---         , on
---             "input"
---             targetValue
---             (\v -> Signal.message address (Update { item | description = v } v))
---         ]
---         []
---     , input
---         [ style Styles.panelDescription
---         , value item.timespan
---         , on
---             "input"
---             targetValue
---             (\v -> Signal.message address (Update { item | timespan = v } v))
---         ]
---         []
---     , button [ onClick address (Remove item.id) ] [ text "delete" ]
---     ]
 
 
 view : Signal.Address Action -> Model -> Html
