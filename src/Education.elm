@@ -18,14 +18,15 @@ type alias Model =
 
 
 type alias Education =
-  { id : Int, school : String, description : String }
+  { id : Int, school : String, description : String, timespan : String }
 
 
 initEducation : Int -> Education
 initEducation id =
   { id = id
-  , school = "New University"
-  , description = "Catholic school with a lot of nice buildings."
+  , school = "Boston College"
+  , description = "BA Philosophy and Physics"
+  , timespan = "2006 - 2010"
   }
 
 
@@ -69,36 +70,71 @@ update action model =
         newModel
 
 
-educationRow : Signal.Address Action -> Education -> Html
-educationRow address item =
+itemRow : Signal.Address Action -> String -> Html
+itemRow address item =
   li
     []
-    [ span
-        []
-        [ text ("id: " ++ (toString item.id) ++ "   ")
-        , input
-            [ style Styles.titleFont
-            , value item.school
-            , on
-                "input"
-                targetValue
-                (\v -> Signal.message address (Update { item | school = v } v))
-              --, style (Styles.inputStyle ++ Styles.titleFont)
-            ]
-            []
-        , input
-            [ value
-                item.description
-            , on
-                "input"
-                targetValue
-                (\v -> Signal.message address (Update { item | description = v } v))
-              --  , style Styles.inputStyle
-            ]
-            []
-        , button [ onClick address (Remove item.id) ] [ text "delete" ]
+    [ input
+        [ style Styles.panelItemHeader
+        , value item.item
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | item = v } v))
         ]
+        []
     ]
+
+
+educationRow : Signal.Address Action -> Education -> Html
+educationRow address item =
+  let
+    fields : List String
+    fields =
+      [ "school", "description", "timespan" ]
+
+    rows =
+      List.map (\v -> itemRow address item.v) fields
+  in
+    li
+      [ style Styles.panelLine ]
+      [ ul [] rows ]
+
+
+
+-- educationRow : Signal.Address Action -> Education -> Html
+-- educationRow address item =
+--   li
+--     [ style Styles.panelLine ]
+--     [ input
+--         [ style Styles.panelItemHeader
+--         , value item.school
+--         , on
+--             "input"
+--             targetValue
+--             (\v -> Signal.message address (Update { item | school = v } v))
+--         ]
+--         []
+--     , input
+--         [ style Styles.panelDescription
+--         , value item.description
+--         , on
+--             "input"
+--             targetValue
+--             (\v -> Signal.message address (Update { item | description = v } v))
+--         ]
+--         []
+--     , input
+--         [ style Styles.panelDescription
+--         , value item.timespan
+--         , on
+--             "input"
+--             targetValue
+--             (\v -> Signal.message address (Update { item | timespan = v } v))
+--         ]
+--         []
+--     , button [ onClick address (Remove item.id) ] [ text "delete" ]
+--     ]
 
 
 view : Signal.Address Action -> Model -> Html
@@ -108,9 +144,13 @@ view address items =
       List.map (educationRow address) items
   in
     div
-      []
-      [ ul [] rows
-      , button [ onClick address Add ] [ text "add new" ]
+      [ style Styles.panelBackground ]
+      [ div
+          []
+          [ p [ style Styles.panelHeader ] [ text "Education" ]
+          , ul [ style Styles.panelTable ] rows
+          , button [ onClick address Add ] [ text "add new" ]
+          ]
       ]
 
 

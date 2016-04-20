@@ -10355,13 +10355,33 @@ Elm.Styles.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var panelDescription = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "14px"},{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
+   var panelItemHeader = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "18px"}
+                                 ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
+                                 ,{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
+   var panelHeader = _U.list([{ctor: "_Tuple2",_0: "font-weight",_1: "normal"},{ctor: "_Tuple2",_0: "font-size",_1: "24px"}]);
+   var panelLine = _U.list([{ctor: "_Tuple2",_0: "margin",_1: "0px 0px 30px 0px"}]);
+   var panelTable = _U.list([{ctor: "_Tuple2",_0: "padding-left",_1: "0px"}]);
+   var panelInnerDiv = _U.list([]);
+   var panelBackground = _U.list([{ctor: "_Tuple2",_0: "background-color",_1: "#F8F8F8"}
+                                 ,{ctor: "_Tuple2",_0: "box-shadow",_1: "0px 1px 4px rgba(209, 202, 202, 0.5)"}
+                                 ,{ctor: "_Tuple2",_0: "padding",_1: "10px 30px 10px 30px"}]);
    var titleFont = _U.list([{ctor: "_Tuple2",_0: "font-families",_1: "futura, sans-serif"}
                            ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
                            ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}]);
    var inputStyle = _U.list([{ctor: "_Tuple2",_0: "border",_1: "none"}
                             ,{ctor: "_Tuple2",_0: "appearance",_1: "none"}
                             ,{ctor: "_Tuple2",_0: "background-color",_1: "rgba(0, 0, 0, 0)"}]);
-   return _elm.Styles.values = {_op: _op,inputStyle: inputStyle,titleFont: titleFont};
+   return _elm.Styles.values = {_op: _op
+                               ,inputStyle: inputStyle
+                               ,titleFont: titleFont
+                               ,panelBackground: panelBackground
+                               ,panelInnerDiv: panelInnerDiv
+                               ,panelTable: panelTable
+                               ,panelLine: panelLine
+                               ,panelHeader: panelHeader
+                               ,panelItemHeader: panelItemHeader
+                               ,panelDescription: panelDescription};
 };
 Elm.Education = Elm.Education || {};
 Elm.Education.make = function (_elm) {
@@ -10381,7 +10401,7 @@ Elm.Education.make = function (_elm) {
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var initEducation = function (id) {    return {id: id,school: "New University",description: "Catholic school with a lot of nice buildings."};};
+   var initEducation = function (id) {    return {id: id,school: "Boston College",description: "BA Philosophy and Physics",timespan: "2006 - 2010"};};
    var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -10395,18 +10415,15 @@ Elm.Education.make = function (_elm) {
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
            return newModel;}
    });
-   var Education = F3(function (a,b,c) {    return {id: a,school: b,description: c};});
+   var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    var educationRow = F2(function (address,item) {
       return A2($Html.li,
-      _U.list([]),
-      _U.list([A2($Html.span,
-      _U.list([]),
-      _U.list([$Html.text(A2($Basics._op["++"],"id: ",A2($Basics._op["++"],$Basics.toString(item.id),"   ")))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.titleFont)
+      _U.list([$Html$Attributes.style($Styles.panelLine)]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.style($Styles.panelItemHeader)
                       ,$Html$Attributes.value(item.school)
                       ,A3($Html$Events.on,
                       "input",
@@ -10416,7 +10433,8 @@ Elm.Education.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.value(item.description)
+              _U.list([$Html$Attributes.style($Styles.panelDescription)
+                      ,$Html$Attributes.value(item.description)
                       ,A3($Html$Events.on,
                       "input",
                       $Html$Events.targetValue,
@@ -10424,13 +10442,27 @@ Elm.Education.make = function (_elm) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{description: v}),v));
                       })]),
               _U.list([]))
-              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]))]));
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.style($Styles.panelDescription)
+                      ,$Html$Attributes.value(item.timespan)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{timespan: v}),v));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]));
    });
    var view = F2(function (address,items) {
       var rows = A2($List.map,educationRow(address),items);
       return A2($Html.div,
+      _U.list([$Html$Attributes.style($Styles.panelBackground)]),
+      _U.list([A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.ul,_U.list([]),rows),A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]));
+      _U.list([A2($Html.p,_U.list([$Html$Attributes.style($Styles.panelHeader)]),_U.list([$Html.text("Education")]))
+              ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
    return _elm.Education.values = {_op: _op
                                   ,Update: Update
