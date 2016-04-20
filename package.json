@@ -8,7 +8,7 @@
     "chokidar-cli": "^1.2.0"
   },
   "scripts": {
-    "watch": "chokidar '**/*.elm' -c 'elm-css src/Stylesheets.elm' 'elm make src/Main.elm --output elm.js'",
+    "watch": "chokidar '**/*.elm' -c 'elm make src/Main.elm --output elm.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

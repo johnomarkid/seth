@@ -3,7 +3,10 @@ input {
     background-color: rgba(0, 0, 0, 0);
 }
 
-.sethPanel {
-    background-color: #F8F8F8;
-    padding: 20px;
+input:focus {
+    outline: none;
+}
+
+ul {
+  list-style: none;
 }

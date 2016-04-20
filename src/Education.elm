@@ -4,12 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Utils
-import Html.CssHelpers
-import MyCss
-
-
-{ id, class, classList } =
-  Html.CssHelpers.withNamespace "seth"
+import Styles
 
 
 type Action
@@ -82,7 +77,8 @@ educationRow address item =
         []
         [ text ("id: " ++ (toString item.id) ++ "   ")
         , input
-            [ value item.school
+            [ style Styles.titleFont
+            , value item.school
             , on
                 "input"
                 targetValue
@@ -91,9 +87,7 @@ educationRow address item =
             ]
             []
         , input
-            [ class
-                [ MyCss.HiddenInput ]
-            , value
+            [ value
                 item.description
             , on
                 "input"
@@ -114,7 +108,7 @@ view address items =
       List.map (educationRow address) items
   in
     div
-      [ class [ MyCss.Panel ] ]
+      []
       [ ul [] rows
       , button [ onClick address Add ] [ text "add new" ]
       ]

@@ -1,18 +1,6 @@
 module Styles (..) where
 
 
-panelBackground : List ( String, String )
-panelBackground =
-  [ ( "background-color", "#F8F8F8" )
-  , ( "box-shadow", "0px 1px 4px rgba(209, 202, 202, 0.5)" )
-  ]
-
-
-ulStyle : List ( String, String )
-ulStyle =
-  [ ( "list-style", "none" ) ]
-
-
 inputStyle : List ( String, String )
 inputStyle =
   [ ( "border", "none" )
@@ -23,7 +11,16 @@ inputStyle =
 
 titleFont : List ( String, String )
 titleFont =
-  [ ( "font-family", "futura, sans-serif" )
+  [ ( "font-families", "futura, sans-serif" )
   , ( "color", "#66ACFF" )
   , ( "font-size", "2em" )
   ]
+
+
+
+-- titleFont =
+--   styles
+--     [ fontFamilies [ "futura", "sans-serif" ]
+--     , color (hex "66ACFF")
+--     , fontSize (em 2)
+--     ]
