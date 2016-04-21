@@ -4,6 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Utils
+import Styles
 
 
 type Action
@@ -17,20 +18,29 @@ type alias Model =
 
 
 type alias Job =
-  { id : Int, company : String, description : String }
+  { id : Int
+  , position : String
+  , company : String
+  , website : String
+  , timespan : String
+  , description : String
+  }
 
 
-initJob : Int -> Job
-initJob id =
+initEducation : Int -> Job
+initEducation id =
   { id = id
+  , position = "Interaction Designer"
   , company = "Bitfountain"
-  , description = "Teaching the world education."
+  , website = "www.bitfountain.io"
+  , timespan = "August 2012 - Current"
+  , description = "I founded Bitfountain in 2012 with the goal of teaching people how to become expert developers. Over 110,000 students have taken our online video courses, and I lead the company to over $3M in revenue. We are completely bootstrapped."
   }
 
 
 model : Model
 model =
-  [ initJob 0 ]
+  [ initEducation 0 ]
 
 
 update : Action -> Model -> Model
@@ -63,7 +73,7 @@ update action model =
           (.id (Utils.fromJust (List.head model)))
 
         newModel =
-          (initJob (lastID + 1)) :: model
+          (initEducation (lastID + 1)) :: model
       in
         newModel
 
@@ -71,30 +81,54 @@ update action model =
 jobRow : Signal.Address Action -> Job -> Html
 jobRow address item =
   li
-    []
-    [ span
-        []
-        [ text ("id: " ++ (toString item.id) ++ "   ")
-        , input
-            [ value item.company
-            , on
-                "input"
-                targetValue
-                (\v -> Signal.message address (Update { item | company = v } v))
-            , inputStyle
-            ]
-            []
-        , input
-            [ value item.description
-            , on
-                "input"
-                targetValue
-                (\v -> Signal.message address (Update { item | description = v } v))
-            , inputStyle
-            ]
-            []
-        , button [ onClick address (Remove item.id) ] [ text "delete" ]
+    [ style Styles.panelLine ]
+    [ input
+        [ style Styles.panelItemHeader
+        , value item.position
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | position = v } v))
         ]
+        []
+    , input
+        [ style Styles.panelItemDetail
+        , value item.company
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | company = v } v))
+        ]
+        []
+    , input
+        [ style Styles.panelItemDetail
+        , value item.website
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | website = v } v))
+        ]
+        []
+    , input
+        [ style Styles.panelItemDetail
+        , value item.timespan
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | timespan = v } v))
+        ]
+        []
+    , textarea
+        [ style Styles.panelDescription
+        , value item.description
+          --, onKeyUp (Signal.Address a -> Int -> a)
+        , on
+            "input"
+            targetValue
+            (\v -> Signal.message address (Update { item | description = v } v))
+        ]
+        []
+    , button [ onClick address (Remove item.id) ] [ text "delete" ]
     ]
 
 
@@ -105,27 +139,11 @@ view address items =
       List.map (jobRow address) items
   in
     div
-      []
-      [ ul [ ulStyle ] rows
-      , button [ onClick address Add ] [ text "add new" ]
+      [ style Styles.panelBackground ]
+      [ div
+          []
+          [ p [ style Styles.panelHeader ] [ text "Work Experience" ]
+          , ul [ style Styles.panelTable ] rows
+          , button [ onClick address Add ] [ text "add new" ]
+          ]
       ]
-
-
-ulStyle : Attribute
-ulStyle =
-  style
-    [ ( "list-style", "none" ) ]
-
-
-liStyle : Attribute
-liStyle =
-  style
-    [ ( "font-size", "20px" ) ]
-
-
-inputStyle : Attribute
-inputStyle =
-  style
-    [ ( "border", "0" )
-    , ( "appearance", "none" )
-    ]

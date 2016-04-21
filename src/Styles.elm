@@ -55,6 +55,11 @@ panelItemHeader =
   ]
 
 
+panelItemDetail : List ( String, String )
+panelItemDetail =
+  [ ( "font-size", "10px" ) ]
+
+
 panelDescription : List ( String, String )
 panelDescription =
   [ ( "font-size", "14px" )

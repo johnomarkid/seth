@@ -138,5 +138,14 @@ Use elm-css because it has everything i want and it makes css type checked.
 2) abstract update function to apply to all tables. can use input field name to equal
 record name so jobs and schools are properly location in update.
 
+3) How to dynamically update records. Example"
+
+record = {john = 5, matt = 10}
+
+function dynamicField =
+  {record | dynamicField = 13}
+
+Can do something like this with Dict but lose type safety.
+
 
 -}

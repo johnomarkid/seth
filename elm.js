@@ -10356,6 +10356,7 @@ Elm.Styles.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var panelDescription = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "14px"},{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
+   var panelItemDetail = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "10px"}]);
    var panelItemHeader = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "18px"}
                                  ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
                                  ,{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
@@ -10381,6 +10382,7 @@ Elm.Styles.make = function (_elm) {
                                ,panelLine: panelLine
                                ,panelHeader: panelHeader
                                ,panelItemHeader: panelItemHeader
+                               ,panelItemDetail: panelItemDetail
                                ,panelDescription: panelDescription};
 };
 Elm.Education = Elm.Education || {};
@@ -10490,13 +10492,19 @@ Elm.WorkExperience.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var inputStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: "0"},{ctor: "_Tuple2",_0: "appearance",_1: "none"}]));
-   var liStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "font-size",_1: "20px"}]));
-   var ulStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "list-style",_1: "none"}]));
-   var initJob = function (id) {    return {id: id,company: "Bitfountain",description: "Teaching the world education."};};
-   var model = _U.list([initJob(0)]);
+   var autoGrowTextarea = function (aTextarea) {    return _U.cmp(aTextarea.style.clientHeight,aTextarea.scrollHeight) < 0 ? aTextarea : aTextarea;};
+   var initEducation = function (id) {
+      return {id: id
+             ,position: "Interaction Designer"
+             ,company: "Bitfountain"
+             ,website: "www.bitfountain.io"
+             ,timespan: "August 2012 - Current"
+             ,description: "I founded Bitfountain in 2012 with the goal of teaching people how to become expert developers. Over 110,000 students have taken our online video courses, and I lead the company to over $3M in revenue. We are completely bootstrapped."};
+   };
+   var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
@@ -10506,60 +10514,89 @@ Elm.WorkExperience.make = function (_elm) {
          case "Remove": var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p0._0);},model);
            return removeModel;
          default: var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
-           var newModel = A2($List._op["::"],initJob(lastID + 1),model);
+           var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
            return newModel;}
    });
-   var Job = F3(function (a,b,c) {    return {id: a,company: b,description: c};});
+   var Job = F6(function (a,b,c,d,e,f) {    return {id: a,position: b,company: c,website: d,timespan: e,description: f};});
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    var jobRow = F2(function (address,item) {
       return A2($Html.li,
-      _U.list([]),
-      _U.list([A2($Html.span,
-      _U.list([]),
-      _U.list([$Html.text(A2($Basics._op["++"],"id: ",A2($Basics._op["++"],$Basics.toString(item.id),"   ")))
+      _U.list([$Html$Attributes.style($Styles.panelLine)]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.style($Styles.panelItemHeader)
+                      ,$Html$Attributes.value(item.position)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{position: v}),v));
+                      })]),
+              _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.value(item.company)
+              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+                      ,$Html$Attributes.value(item.company)
                       ,A3($Html$Events.on,
                       "input",
                       $Html$Events.targetValue,
                       function (v) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{company: v}),v));
-                      })
-                      ,inputStyle]),
+                      })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.value(item.description)
+              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+                      ,$Html$Attributes.value(item.website)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{website: v}),v));
+                      })]),
+              _U.list([]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+                      ,$Html$Attributes.value(item.timespan)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (v) {
+                         return A2($Signal.message,address,A2(Update,_U.update(item,{timespan: v}),v));
+                      })]),
+              _U.list([]))
+              ,A2($Html.textarea,
+              _U.list([$Html$Attributes.style($Styles.panelDescription)
+                      ,$Html$Attributes.value(item.description)
                       ,A3($Html$Events.on,
                       "input",
                       $Html$Events.targetValue,
                       function (v) {
                          return A2($Signal.message,address,A2(Update,_U.update(item,{description: v}),v));
-                      })
-                      ,inputStyle]),
+                      })]),
               _U.list([]))
-              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]))]));
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]));
    });
    var view = F2(function (address,items) {
       var rows = A2($List.map,jobRow(address),items);
       return A2($Html.div,
+      _U.list([$Html$Attributes.style($Styles.panelBackground)]),
+      _U.list([A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.ul,_U.list([ulStyle]),rows),A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]));
+      _U.list([A2($Html.p,_U.list([$Html$Attributes.style($Styles.panelHeader)]),_U.list([$Html.text("Work Experience")]))
+              ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
    return _elm.WorkExperience.values = {_op: _op
                                        ,Update: Update
                                        ,Remove: Remove
                                        ,Add: Add
                                        ,Job: Job
-                                       ,initJob: initJob
+                                       ,initEducation: initEducation
                                        ,model: model
                                        ,update: update
                                        ,jobRow: jobRow
-                                       ,view: view
-                                       ,ulStyle: ulStyle
-                                       ,liStyle: liStyle
-                                       ,inputStyle: inputStyle};
+                                       ,autoGrowTextarea: autoGrowTextarea
+                                       ,view: view};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {

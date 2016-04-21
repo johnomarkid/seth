@@ -12,6 +12,17 @@ input:focus {
     outline: none;
 }
 
+textarea {
+    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    display: block;
+    resize: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
 ul {
   list-style: none;
 }
