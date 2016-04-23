@@ -3,6 +3,7 @@ module WorkExperience (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Style exposing (..)
 import Utils
 import Styles
 
@@ -80,56 +81,63 @@ update action model =
 
 jobRow : Signal.Address Action -> Job -> Html
 jobRow address item =
-  li
-    [ style Styles.panelLine ]
-    [ input
-        [ style Styles.panelItemHeader
-        , value item.position
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | position = v } v))
-        ]
-        []
-    , input
-        [ style Styles.panelItemDetail
-        , value item.company
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | company = v } v))
-        ]
-        []
-    , input
-        [ style Styles.panelItemDetail
-        , value item.website
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | website = v } v))
-        ]
-        []
-    , input
-        [ style Styles.panelItemDetail
-        , value item.timespan
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | timespan = v } v))
-        ]
-        []
-    , textarea
-        [ style Styles.panelDescription
-        , value item.description
-          --, onKeyUp (Signal.Address a -> Int -> a)
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | description = v } v))
-        ]
-        []
-    , button [ onClick address (Remove item.id) ] [ text "delete" ]
-    ]
+  let
+    linespace =
+      [ Style.marginBottom (px 10) ]
+  in
+    li
+      []
+      [ input
+          [ style (Styles.panelItemHeader ++ linespace)
+          , value item.position
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | position = v } v))
+          ]
+          []
+      , input
+          [ style (Styles.panelItemDetail ++ linespace)
+          , value item.company
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | company = v } v))
+          ]
+          []
+      , input
+          [ style (Styles.panelItemDetail ++ linespace)
+          , value item.website
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | website = v } v))
+          ]
+          []
+      , input
+          [ style (Styles.panelItemDetail ++ linespace)
+          , value item.timespan
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | timespan = v } v))
+          ]
+          []
+      , textarea
+          [ style (Styles.panelDescription ++ linespace)
+          , value item.description
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | description = v } v))
+          ]
+          []
+      , button [ onClick address (Remove item.id) ] [ text "delete" ]
+      ]
+
+
+
+-- TODO try to set up mailbox and signal for onKeyUp to update input size
 
 
 view : Signal.Address Action -> Model -> Html

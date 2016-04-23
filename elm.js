@@ -10932,37 +10932,29 @@ Elm.Styles.make = function (_elm) {
    if (_elm.Styles.values) return _elm.Styles.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $Style = Elm.Style.make(_elm);
    var _op = {};
-   var panelDescription = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "14px"},{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
-   var panelItemDetail = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "10px"}]);
-   var panelItemHeader = _U.list([{ctor: "_Tuple2",_0: "font-size",_1: "18px"}
-                                 ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
-                                 ,{ctor: "_Tuple2",_0: "width",_1: "100%"}]);
-   var panelHeader = _U.list([{ctor: "_Tuple2",_0: "font-weight",_1: "normal"},{ctor: "_Tuple2",_0: "font-size",_1: "24px"}]);
-   var panelLine = _U.list([{ctor: "_Tuple2",_0: "margin",_1: "0px 0px 30px 0px"}]);
-   var panelTable = _U.list([{ctor: "_Tuple2",_0: "padding-left",_1: "0px"}]);
+   var panelDescription = _U.list([$Style.fontSize($Style.px(14)),$Style.width($Style.pc(100))]);
+   var panelItemDetail = _U.list([$Style.fontSize($Style.px(10))]);
+   var panelItemHeader = _U.list([$Style.fontSize($Style.px(18)),$Style.color($Style.color$(A3($Color.rgb,102,172,255))),$Style.width($Style.pc(100))]);
+   var panelHeader = _U.list([$Style.fontWeight($Style.normal),$Style.fontSize($Style.px(24))]);
+   var panelTable = _U.list([$Style.paddingLeft($Style.px(0)),$Style.lineHeight($Style.px(30))]);
    var panelInnerDiv = _U.list([]);
-   var panelBackground = _U.list([{ctor: "_Tuple2",_0: "background-color",_1: "#F8F8F8"}
-                                 ,{ctor: "_Tuple2",_0: "box-shadow",_1: "0px 1px 4px rgba(209, 202, 202, 0.5)"}
-                                 ,{ctor: "_Tuple2",_0: "padding",_1: "10px 30px 10px 30px"}]);
-   var titleFont = _U.list([{ctor: "_Tuple2",_0: "font-families",_1: "futura, sans-serif"}
-                           ,{ctor: "_Tuple2",_0: "color",_1: "#66ACFF"}
-                           ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}]);
-   var inputStyle = _U.list([{ctor: "_Tuple2",_0: "border",_1: "none"}
-                            ,{ctor: "_Tuple2",_0: "appearance",_1: "none"}
-                            ,{ctor: "_Tuple2",_0: "background-color",_1: "rgba(0, 0, 0, 0)"}]);
+   var panelBackground = _U.list([$Style.backgroundColor($Style.color$(A3($Color.rgb,248,248,248)))
+                                 ,$Style.boxShadow("0px 1px 4px rgba(209, 202, 202, 0.5)")
+                                 ,$Style.padding("10px 30px 10px 30px")]);
+   var inputStyle = _U.list([$Style.border($Style.none),$Style.backgroundColor($Style.color$(A4($Color.rgba,0,0,0,0)))]);
    return _elm.Styles.values = {_op: _op
                                ,inputStyle: inputStyle
-                               ,titleFont: titleFont
                                ,panelBackground: panelBackground
                                ,panelInnerDiv: panelInnerDiv
                                ,panelTable: panelTable
-                               ,panelLine: panelLine
                                ,panelHeader: panelHeader
                                ,panelItemHeader: panelItemHeader
                                ,panelItemDetail: panelItemDetail
@@ -10983,6 +10975,7 @@ Elm.Education.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Style = Elm.Style.make(_elm),
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
@@ -11005,10 +10998,11 @@ Elm.Education.make = function (_elm) {
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    var educationRow = F2(function (address,item) {
+      var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
       return A2($Html.li,
-      _U.list([$Html$Attributes.style($Styles.panelLine)]),
+      _U.list([]),
       _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelItemHeader)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
                       ,$Html$Attributes.value(item.school)
                       ,A3($Html$Events.on,
                       "input",
@@ -11018,7 +11012,7 @@ Elm.Education.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelDescription)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))
                       ,$Html$Attributes.value(item.description)
                       ,A3($Html$Events.on,
                       "input",
@@ -11028,7 +11022,7 @@ Elm.Education.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelDescription)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))
                       ,$Html$Attributes.value(item.timespan)
                       ,A3($Html$Events.on,
                       "input",
@@ -11075,6 +11069,7 @@ Elm.WorkExperience.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Style = Elm.Style.make(_elm),
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
@@ -11104,10 +11099,11 @@ Elm.WorkExperience.make = function (_elm) {
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    var jobRow = F2(function (address,item) {
+      var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
       return A2($Html.li,
-      _U.list([$Html$Attributes.style($Styles.panelLine)]),
+      _U.list([]),
       _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelItemHeader)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
                       ,$Html$Attributes.value(item.position)
                       ,A3($Html$Events.on,
                       "input",
@@ -11117,7 +11113,7 @@ Elm.WorkExperience.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemDetail,linespace))
                       ,$Html$Attributes.value(item.company)
                       ,A3($Html$Events.on,
                       "input",
@@ -11127,7 +11123,7 @@ Elm.WorkExperience.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemDetail,linespace))
                       ,$Html$Attributes.value(item.website)
                       ,A3($Html$Events.on,
                       "input",
@@ -11137,7 +11133,7 @@ Elm.WorkExperience.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.input,
-              _U.list([$Html$Attributes.style($Styles.panelItemDetail)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemDetail,linespace))
                       ,$Html$Attributes.value(item.timespan)
                       ,A3($Html$Events.on,
                       "input",
@@ -11147,7 +11143,7 @@ Elm.WorkExperience.make = function (_elm) {
                       })]),
               _U.list([]))
               ,A2($Html.textarea,
-              _U.list([$Html$Attributes.style($Styles.panelDescription)
+              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))
                       ,$Html$Attributes.value(item.description)
                       ,A3($Html$Events.on,
                       "input",
@@ -11186,6 +11182,7 @@ Elm.Main.make = function (_elm) {
    if (_elm.Main.values) return _elm.Main.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Education = Elm.Education.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -11198,7 +11195,6 @@ Elm.Main.make = function (_elm) {
    $Style = Elm.Style.make(_elm),
    $WorkExperience = Elm.WorkExperience.make(_elm);
    var _op = {};
-   var sidePanel = _U.list([{ctor: "_Tuple2",_0: "width",_1: "40%"}]);
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
@@ -11214,9 +11210,13 @@ Elm.Main.make = function (_elm) {
       var workExperienceTable = A2($WorkExperience.view,A2($Signal.forwardTo,address,WorkExperienceAction),items.jobs);
       var educationTable = A2($Education.view,A2($Signal.forwardTo,address,EducationAction),items.education);
       return A2($Html.div,
-      _U.list([$Html$Attributes.style(_U.list([$Style.display($Style.flex$)]))]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.style(sidePanel)]),_U.list([educationTable]))
-              ,A2($Html.div,_U.list([$Html$Attributes.style(sidePanel)]),_U.list([workExperienceTable]))]));
+      _U.list([$Html$Attributes.style(_U.list([$Style.display($Style.flex$)
+                                              ,$Style.justifyContent($Style.spaceBetween)
+                                              ,$Style.backgroundColor($Style.color$($Color.white))
+                                              ,$Style.margin($Style.px(50))
+                                              ,$Style.padding($Style.px(77))]))]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.style(_U.list([$Style.width($Style.pc(45))]))]),_U.list([educationTable]))
+              ,A2($Html.div,_U.list([$Html$Attributes.style(_U.list([$Style.width($Style.pc(45))]))]),_U.list([workExperienceTable]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var init = {education: $Education.model,jobs: $WorkExperience.model};
@@ -11230,6 +11230,5 @@ Elm.Main.make = function (_elm) {
                              ,WorkExperienceAction: WorkExperienceAction
                              ,update: update
                              ,view: view
-                             ,sidePanel: sidePanel
                              ,main: main};
 };

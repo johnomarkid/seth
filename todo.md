@@ -25,5 +25,3 @@ Can do something like this with Dict but lose type safety.
 
 4) Create an elm function to auto grow textarea. Could use one of
 a million js libs, but better to stay in elm.
-
-5) convert all styles to use elm-style. Want type checking in our css.

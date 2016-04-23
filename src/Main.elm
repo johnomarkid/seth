@@ -3,10 +3,11 @@ module Main (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Style exposing (..)
+import Color
 import StartApp.Simple exposing (start)
 import Education
 import WorkExperience
-import Style exposing (..)
 
 
 -- Model
@@ -74,19 +75,21 @@ view address items =
       WorkExperience.view (Signal.forwardTo address WorkExperienceAction) items.jobs
   in
     div
-      [ style [ display flex' ] ]
+      [ style
+          [ display flex'
+          , justifyContent spaceBetween
+          , backgroundColor (color' Color.white)
+          , margin (px 50)
+          , padding (px 77)
+          ]
+      ]
       [ div
-          [ style sidePanel ]
+          [ style [ Style.width (pc 45) ] ]
           [ educationTable ]
       , div
-          [ style sidePanel ]
+          [ style [ Style.width (pc 45) ] ]
           [ workExperienceTable ]
       ]
-
-
-sidePanel : List ( String, String )
-sidePanel =
-  [ ( "width", "40%" ) ]
 
 
 

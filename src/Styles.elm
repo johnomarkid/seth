@@ -1,67 +1,63 @@
 module Styles (..) where
 
+import Style exposing (..)
+import Color exposing (..)
 
-inputStyle : List ( String, String )
+
+type alias Styles =
+  List ( String, String )
+
+
+inputStyle : Styles
 inputStyle =
-  [ ( "border", "none" )
-  , ( "appearance", "none" )
-  , ( "background-color", "rgba(0, 0, 0, 0)" )
+  [ border none
+  , backgroundColor (color' (rgba 0 0 0 0))
   ]
 
 
-titleFont : List ( String, String )
-titleFont =
-  [ ( "font-families", "futura, sans-serif" )
-  , ( "color", "#66ACFF" )
-  , ( "font-size", "2em" )
-  ]
-
-
-panelBackground : List ( String, String )
+panelBackground : Styles
 panelBackground =
-  [ ( "background-color", "#F8F8F8" )
-  , ( "box-shadow", "0px 1px 4px rgba(209, 202, 202, 0.5)" )
-  , ( "padding", "10px 30px 10px 30px" )
+  [ backgroundColor (color' (rgb 248 248 248))
+  , boxShadow "0px 1px 4px rgba(209, 202, 202, 0.5)"
+    --, padding ((px 10) ++ (px 30) ++ (px 10) ++ (px 30))
+  , padding "10px 30px 10px 30px"
   ]
 
 
-panelInnerDiv : List ( String, String )
+panelInnerDiv : Styles
 panelInnerDiv =
   []
 
 
-panelTable : List ( String, String )
+panelTable : Styles
 panelTable =
-  [ ( "padding-left", "0px" ) ]
+  [ paddingLeft (px 0)
+  , lineHeight (px 30)
+  ]
 
 
-panelLine : List ( String, String )
-panelLine =
-  [ ( "margin", "0px 0px 30px 0px" ) ]
-
-
-panelHeader : List ( String, String )
+panelHeader : Styles
 panelHeader =
-  [ ( "font-weight", "normal" )
-  , ( "font-size", "24px" )
+  [ fontWeight normal
+  , fontSize (px 24)
   ]
 
 
-panelItemHeader : List ( String, String )
+panelItemHeader : Styles
 panelItemHeader =
-  [ ( "font-size", "18px" )
-  , ( "color", "#66ACFF" )
-  , ( "width", "100%" )
+  [ fontSize (px 18)
+  , color (color' (rgb 102 172 255))
+  , width (pc 100)
   ]
 
 
-panelItemDetail : List ( String, String )
+panelItemDetail : Styles
 panelItemDetail =
-  [ ( "font-size", "10px" ) ]
+  [ fontSize (px 10) ]
 
 
-panelDescription : List ( String, String )
+panelDescription : Styles
 panelDescription =
-  [ ( "font-size", "14px" )
-  , ( "width", "100%" )
+  [ fontSize (px 14)
+  , width (pc 100)
   ]

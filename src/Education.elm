@@ -3,6 +3,7 @@ module Education (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Style exposing (..)
 import Utils
 import Styles
 
@@ -72,37 +73,41 @@ update action model =
 
 educationRow : Signal.Address Action -> Education -> Html
 educationRow address item =
-  li
-    [ style Styles.panelLine ]
-    [ input
-        [ style Styles.panelItemHeader
-        , value item.school
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | school = v } v))
-        ]
-        []
-    , input
-        [ style Styles.panelDescription
-        , value item.description
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | description = v } v))
-        ]
-        []
-    , input
-        [ style Styles.panelDescription
-        , value item.timespan
-        , on
-            "input"
-            targetValue
-            (\v -> Signal.message address (Update { item | timespan = v } v))
-        ]
-        []
-    , button [ onClick address (Remove item.id) ] [ text "delete" ]
-    ]
+  let
+    linespace =
+      [ Style.marginBottom (px 10) ]
+  in
+    li
+      []
+      [ input
+          [ style (Styles.panelItemHeader ++ linespace)
+          , value item.school
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | school = v } v))
+          ]
+          []
+      , input
+          [ style (Styles.panelDescription ++ linespace)
+          , value item.description
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | description = v } v))
+          ]
+          []
+      , input
+          [ style (Styles.panelDescription ++ linespace)
+          , value item.timespan
+          , on
+              "input"
+              targetValue
+              (\v -> Signal.message address (Update { item | timespan = v } v))
+          ]
+          []
+      , button [ onClick address (Remove item.id) ] [ text "delete" ]
+      ]
 
 
 view : Signal.Address Action -> Model -> Html
