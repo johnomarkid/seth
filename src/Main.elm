@@ -6,6 +6,7 @@ import Html.Events exposing (..)
 import StartApp.Simple exposing (start)
 import Education
 import WorkExperience
+import Style exposing (..)
 
 
 -- Model
@@ -61,7 +62,6 @@ update action model =
 
 
 -- View
--- put table in a div and style it all.
 
 
 view : Signal.Address Action -> Model -> Html
@@ -74,10 +74,19 @@ view address items =
       WorkExperience.view (Signal.forwardTo address WorkExperienceAction) items.jobs
   in
     div
-      []
-      [ educationTable
-      , workExperienceTable
+      [ style [ display flex' ] ]
+      [ div
+          [ style sidePanel ]
+          [ educationTable ]
+      , div
+          [ style sidePanel ]
+          [ workExperienceTable ]
       ]
+
+
+sidePanel : List ( String, String )
+sidePanel =
+  [ ( "width", "40%" ) ]
 
 
 
