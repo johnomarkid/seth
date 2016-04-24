@@ -10960,6 +10960,43 @@ Elm.Styles.make = function (_elm) {
                                ,panelItemDetail: panelItemDetail
                                ,panelDescription: panelDescription};
 };
+Elm.GrowTextarea = Elm.GrowTextarea || {};
+Elm.GrowTextarea.make = function (_elm) {
+   "use strict";
+   _elm.GrowTextarea = _elm.GrowTextarea || {};
+   if (_elm.GrowTextarea.values) return _elm.GrowTextarea.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "UpdateText") {
+            return _U.update(model,{text: _p0._0});
+         } else {
+            return model;
+         }
+   });
+   var GrowField = {ctor: "GrowField"};
+   var UpdateText = function (a) {    return {ctor: "UpdateText",_0: a};};
+   var view = F2(function (address,model) {
+      return A2($Html.textarea,
+      _U.list([$Html$Attributes.value(model.text)
+              ,$Html$Attributes.rows(model.numLines)
+              ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,UpdateText(v));})]),
+      _U.list([]));
+   });
+   var init = function (t) {    return {text: t,numLines: 2};};
+   var Model = F2(function (a,b) {    return {text: a,numLines: b};});
+   return _elm.GrowTextarea.values = {_op: _op,Model: Model,init: init,UpdateText: UpdateText,GrowField: GrowField,update: update,view: view};
+};
 Elm.Education = Elm.Education || {};
 Elm.Education.make = function (_elm) {
    "use strict";
@@ -10968,6 +11005,7 @@ Elm.Education.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $GrowTextarea = Elm.GrowTextarea.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
@@ -10979,7 +11017,12 @@ Elm.Education.make = function (_elm) {
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var initEducation = function (id) {    return {id: id,school: "Boston College",description: "BA Philosophy and Physics",timespan: "2006 - 2010"};};
+   var initEducation = function (id) {
+      return {id: id
+             ,school: $GrowTextarea.init("Boston College")
+             ,description: $GrowTextarea.init("BA Philosophy and Physics")
+             ,timespan: $GrowTextarea.init("2006 - 2010")};
+   };
    var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -10989,48 +11032,22 @@ Elm.Education.make = function (_elm) {
            return newModel;
          case "Remove": var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p0._0);},model);
            return removeModel;
-         default: var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
+         case "Add": var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
-           return newModel;}
+           return newModel;
+         default: return model;}
    });
    var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});
+   var GrowAction = function (a) {    return {ctor: "GrowAction",_0: a};};
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
-   var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    var educationRow = F2(function (address,item) {
       var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
       return A2($Html.li,
       _U.list([]),
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
-                      ,$Html$Attributes.value(item.school)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (v) {
-                         return A2($Signal.message,address,A2(Update,_U.update(item,{school: v}),v));
-                      })]),
-              _U.list([]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))
-                      ,$Html$Attributes.value(item.description)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (v) {
-                         return A2($Signal.message,address,A2(Update,_U.update(item,{description: v}),v));
-                      })]),
-              _U.list([]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))
-                      ,$Html$Attributes.value(item.timespan)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (v) {
-                         return A2($Signal.message,address,A2(Update,_U.update(item,{timespan: v}),v));
-                      })]),
-              _U.list([]))
+      _U.list([A2($GrowTextarea.view,A2($Signal.forwardTo,address,GrowAction),item.school)
+              ,A2($Html.input,_U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))]),_U.list([]))
+              ,A2($Html.input,_U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))]),_U.list([]))
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]));
    });
    var view = F2(function (address,items) {
@@ -11043,10 +11060,12 @@ Elm.Education.make = function (_elm) {
               ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
+   var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    return _elm.Education.values = {_op: _op
                                   ,Update: Update
                                   ,Remove: Remove
                                   ,Add: Add
+                                  ,GrowAction: GrowAction
                                   ,Education: Education
                                   ,initEducation: initEducation
                                   ,model: model

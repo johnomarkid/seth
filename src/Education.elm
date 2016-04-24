@@ -6,12 +6,14 @@ import Html.Events exposing (..)
 import Style exposing (..)
 import Utils
 import Styles
+import GrowTextarea exposing (..)
 
 
 type Action
   = Update Education String
   | Remove Int
   | Add
+  | GrowAction GrowTextarea.Action
 
 
 type alias Model =
@@ -19,15 +21,19 @@ type alias Model =
 
 
 type alias Education =
-  { id : Int, school : String, description : String, timespan : String }
+  { id : Int
+  , school : GrowTextarea.Model
+  , description : GrowTextarea.Model
+  , timespan : GrowTextarea.Model
+  }
 
 
 initEducation : Int -> Education
 initEducation id =
   { id = id
-  , school = "Boston College"
-  , description = "BA Philosophy and Physics"
-  , timespan = "2006 - 2010"
+  , school = GrowTextarea.init "Boston College"
+  , description = GrowTextarea.init "BA Philosophy and Physics"
+  , timespan = GrowTextarea.init "2006 - 2010"
   }
 
 
@@ -70,6 +76,9 @@ update action model =
       in
         newModel
 
+    GrowAction subAction ->
+      model
+
 
 educationRow : Signal.Address Action -> Education -> Html
 educationRow address item =
@@ -79,31 +88,33 @@ educationRow address item =
   in
     li
       []
-      [ input
-          [ style (Styles.panelItemHeader ++ linespace)
-          , value item.school
-          , on
-              "input"
-              targetValue
-              (\v -> Signal.message address (Update { item | school = v } v))
+      [ GrowTextarea.view
+          (Signal.forwardTo address GrowAction)
+          item.school
+        -- [ style (Styles.panelItemHeader ++ linespace)
+        --   --  , value item.school
+        --   -- , on
+        --   --     "input"
+        --   --     targetValue
+        --   --     (\v -> Signal.message address (Update { item | school = v } v))
+        -- ]
+        -- []
+      , input
+          [ style (Styles.panelDescription ++ linespace)
+            --  , value item.description
+            -- , on
+            --     "input"
+            --     targetValue
+            --     (\v -> Signal.message address (Update { item | description = v } v))
           ]
           []
       , input
           [ style (Styles.panelDescription ++ linespace)
-          , value item.description
-          , on
-              "input"
-              targetValue
-              (\v -> Signal.message address (Update { item | description = v } v))
-          ]
-          []
-      , input
-          [ style (Styles.panelDescription ++ linespace)
-          , value item.timespan
-          , on
-              "input"
-              targetValue
-              (\v -> Signal.message address (Update { item | timespan = v } v))
+            --, value item.timespan
+            -- , on
+            --     "input"
+            --     targetValue
+            --     (\v -> Signal.message address (Update { item | timespan = v } v))
           ]
           []
       , button [ onClick address (Remove item.id) ] [ text "delete" ]

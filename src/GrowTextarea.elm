@@ -1,4 +1,4 @@
-module Main (..) where
+module GrowTextarea (..) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -29,8 +29,8 @@ type Action
 update : Action -> Model -> Model
 update action model =
   case action of
-    UpdateText text ->
-      model
+    UpdateText t ->
+      { model | text = t }
 
     GrowField ->
       model
