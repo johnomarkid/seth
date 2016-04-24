@@ -9,12 +9,12 @@ import Html.Events exposing (..)
 
 
 type alias Model =
-  { text : String, numLines : Int }
+  { text : String, numLines : Int, numCols : Int }
 
 
 init : String -> Model
 init t =
-  { text = t, numLines = 2 }
+  { text = t, numLines = 1, numCols = 20 }
 
 
 
@@ -23,7 +23,7 @@ init t =
 
 type Action
   = UpdateText String
-  | GrowField
+  | GrowTextarea
 
 
 update : Action -> Model -> Model
@@ -32,8 +32,15 @@ update action model =
     UpdateText t ->
       { model | text = t }
 
-    GrowField ->
-      model
+    GrowTextarea ->
+      let
+        myNode =
+          Debug.log "cols: " model.numCols
+
+        test =
+          Debug.log "rows: " model.numLines
+      in
+        model
 
 
 view : Signal.Address Action -> Model -> Html
@@ -41,6 +48,8 @@ view address model =
   textarea
     [ value model.text
     , rows model.numLines
+    , cols model.numCols
+    , onKeyUp address (\_ -> GrowTextarea)
     , on
         "input"
         targetValue

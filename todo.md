@@ -25,3 +25,7 @@ Can do something like this with Dict but lose type safety.
 
 4) Create an elm function to auto grow textarea. Could use one of
 a million js libs, but better to stay in elm.
+
+
+Use ports to talk to javascript about the scroll height and other things i
+need to know upon loading.

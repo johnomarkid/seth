@@ -10981,21 +10981,25 @@ Elm.GrowTextarea.make = function (_elm) {
       if (_p0.ctor === "UpdateText") {
             return _U.update(model,{text: _p0._0});
          } else {
+            var test = A2($Debug.log,"rows: ",model.numLines);
+            var myNode = A2($Debug.log,"cols: ",model.numCols);
             return model;
          }
    });
-   var GrowField = {ctor: "GrowField"};
+   var GrowTextarea = {ctor: "GrowTextarea"};
    var UpdateText = function (a) {    return {ctor: "UpdateText",_0: a};};
    var view = F2(function (address,model) {
       return A2($Html.textarea,
       _U.list([$Html$Attributes.value(model.text)
               ,$Html$Attributes.rows(model.numLines)
+              ,$Html$Attributes.cols(model.numCols)
+              ,A2($Html$Events.onKeyUp,address,function (_p1) {    return GrowTextarea;})
               ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,UpdateText(v));})]),
       _U.list([]));
    });
-   var init = function (t) {    return {text: t,numLines: 2};};
-   var Model = F2(function (a,b) {    return {text: a,numLines: b};});
-   return _elm.GrowTextarea.values = {_op: _op,Model: Model,init: init,UpdateText: UpdateText,GrowField: GrowField,update: update,view: view};
+   var init = function (t) {    return {text: t,numLines: 1,numCols: 20};};
+   var Model = F3(function (a,b,c) {    return {text: a,numLines: b,numCols: c};});
+   return _elm.GrowTextarea.values = {_op: _op,Model: Model,init: init,UpdateText: UpdateText,GrowTextarea: GrowTextarea,update: update,view: view};
 };
 Elm.Education = Elm.Education || {};
 Elm.Education.make = function (_elm) {
