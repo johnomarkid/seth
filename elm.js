@@ -11037,7 +11037,7 @@ Elm.Education.make = function (_elm) {
            return newModel;
          default: var _p2 = _p0._0;
            var newSchool = A2($GrowTextarea.update,_p0._1,_p2.school);
-           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p2.id) ? _U.update(_p2,{school: newSchool}) : _p2;},model);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p2.id) ? _U.update(_p2,{school: newSchool}) : v;},model);
            return newModel;}
    });
    var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});

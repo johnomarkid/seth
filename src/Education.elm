@@ -87,7 +87,7 @@ update action model =
               if v.id == item.id then
                 { item | school = newSchool }
               else
-                item
+                v
             )
             model
       in
