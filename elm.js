@@ -11035,21 +11035,18 @@ Elm.Education.make = function (_elm) {
          case "Add": var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
            return newModel;
-         default: return model;}
+         default: var _p2 = _p0._0;
+           var newSchool = A2($GrowTextarea.update,_p0._1,_p2.school);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p2.id) ? _U.update(_p2,{school: newSchool}) : _p2;},model);
+           return newModel;}
    });
    var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});
-   var GrowAction = function (a) {    return {ctor: "GrowAction",_0: a};};
-   var Add = {ctor: "Add"};
-   var Remove = function (a) {    return {ctor: "Remove",_0: a};};
+   var UpdateSchool = F2(function (a,b) {    return {ctor: "UpdateSchool",_0: a,_1: b};});
    var educationRow = F2(function (address,item) {
       var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
-      return A2($Html.li,
-      _U.list([]),
-      _U.list([A2($GrowTextarea.view,A2($Signal.forwardTo,address,GrowAction),item.school)
-              ,A2($Html.input,_U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))]),_U.list([]))
-              ,A2($Html.input,_U.list([$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelDescription,linespace))]),_U.list([]))
-              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Remove(item.id))]),_U.list([$Html.text("delete")]))]));
+      return A2($Html.li,_U.list([]),_U.list([A2($GrowTextarea.view,A2($Signal.forwardTo,address,UpdateSchool(item)),item.school)]));
    });
+   var Add = {ctor: "Add"};
    var view = F2(function (address,items) {
       var rows = A2($List.map,educationRow(address),items);
       return A2($Html.div,
@@ -11060,12 +11057,13 @@ Elm.Education.make = function (_elm) {
               ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
+   var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var Update = F2(function (a,b) {    return {ctor: "Update",_0: a,_1: b};});
    return _elm.Education.values = {_op: _op
                                   ,Update: Update
                                   ,Remove: Remove
                                   ,Add: Add
-                                  ,GrowAction: GrowAction
+                                  ,UpdateSchool: UpdateSchool
                                   ,Education: Education
                                   ,initEducation: initEducation
                                   ,model: model
