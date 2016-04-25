@@ -6,15 +6,23 @@ import Html.Events exposing (..)
 
 
 -- goal: create growing textarea component
+--- test
+
+
+port scrollHeight : Signal Int
+
+
+
+---test
 
 
 type alias Model =
-  { text : String, numLines : Int, numCols : Int }
+  { text : String, numLines : Signal Int, numCols : Int }
 
 
 init : String -> Model
 init t =
-  { text = t, numLines = 1, numCols = 20 }
+  { text = t, numLines = scrollHeight, numCols = 20 }
 
 
 
@@ -45,14 +53,21 @@ update action model =
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  textarea
-    [ value model.text
-    , rows model.numLines
-    , cols model.numCols
-    , onKeyUp address (\_ -> GrowTextarea)
-    , on
-        "input"
-        targetValue
-        (\v -> Signal.message address (UpdateText v))
-    ]
-    []
+  let
+    sh =
+      Debug.log "scroll height: " scrollHeight
+
+    st =
+      (Signal.map (Debug.log "sh port") model.numLines)
+  in
+    textarea
+      [ value model.text
+        -- , rows model.numLines
+        -- , cols model.numCols
+      , onKeyUp address (\_ -> GrowTextarea)
+      , on
+          "input"
+          targetValue
+          (\v -> Signal.message address (UpdateText v))
+      ]
+      []

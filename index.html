@@ -9,7 +9,9 @@
     <body>
         <script src="elm.js"></script>
         <script>
-            Elm.fullscreen(Elm.Main);
+            var main = Elm.fullscreen(Elm.Main, {scrollHeight: 55});
+
+            main.ports.scrollHeight.send(77);
         </script>
     </body>
 </html>
