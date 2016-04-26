@@ -10981,13 +10981,13 @@ Elm.GrowTextarea.make = function (_elm) {
       if (_p0.ctor === "UpdateText") {
             return _U.update(model,{text: _p0._0});
          } else {
-            var test = A2($Debug.log,"rows: ",model.numLines);
-            var myNode = A2($Debug.log,"cols: ",model.numCols);
+            var test = A2($Debug.log,"rows: ",_p0._0);
             return model;
          }
    });
-   var GrowTextarea = {ctor: "GrowTextarea"};
+   var GrowTextarea = function (a) {    return {ctor: "GrowTextarea",_0: a};};
    var UpdateText = function (a) {    return {ctor: "UpdateText",_0: a};};
+<<<<<<< HEAD
    var view = F2(function (address,model) {
       var myspan = A3($Html.node,"span",_U.list([]),_U.list([$Html.text("hello world")]));
       return A2($Html.textarea,
@@ -11005,6 +11005,32 @@ Elm.GrowTextarea.make = function (_elm) {
    return _elm.GrowTextarea.values = {_op: _op
                                      ,focusMailbox: focusMailbox
                                      ,addresses: addresses
+=======
+   var init = function (t) {    return {text: t,numLines: 2,numCols: 20,growSelector: "my-text-area"};};
+   var Model = F4(function (a,b,c,d) {    return {text: a,numLines: b,numCols: c,growSelector: d};});
+   var scrollHeight = Elm.Native.Port.make(_elm).inboundSignal("scrollHeight",
+   "Int",
+   function (v) {
+      return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
+   });
+   var sigmodel = A3($Signal.foldp,update,init("happiness"),A2($Signal.map,GrowTextarea,scrollHeight));
+   var sendSelector = Elm.Native.Port.make(_elm).outboundSignal("sendSelector",
+   function (v) {
+      return {text: v.text,numLines: v.numLines,numCols: v.numCols,growSelector: v.growSelector};
+   },
+   sigmodel);
+   var view = F2(function (address,model) {
+      var sh = A2($Debug.log,"scroll height: ",scrollHeight);
+      return A2($Html.textarea,
+      _U.list([$Html$Attributes.id(model.growSelector)
+              ,$Html$Attributes.value(model.text)
+              ,A2($Html$Events.onKeyUp,address,function (_p1) {    return GrowTextarea(33);})
+              ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,UpdateText(v));})]),
+      _U.list([]));
+   });
+   return _elm.GrowTextarea.values = {_op: _op
+                                     ,sigmodel: sigmodel
+>>>>>>> a4bdba06214b27a2be757af8051d93430da16e10
                                      ,Model: Model
                                      ,init: init
                                      ,UpdateText: UpdateText

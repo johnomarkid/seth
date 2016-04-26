@@ -9,10 +9,14 @@
     <body>
         <script src="elm.js"></script>
         <script>
-            var main = Elm.fullscreen(Elm.Main);
 
+            var elmApp = Elm.fullscreen(Elm.Main, {scrollHeight: 55});
 
+            elmApp.ports.scrollHeight.send(77);
 
+            elmApp.ports.sendSelector.subscribe(function(selector) {
+              console.log(selector);
+            });
         </script>
     </body>
 </html>
