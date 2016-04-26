@@ -10902,6 +10902,38 @@ Elm.Style.make = function (_elm) {
                               ,skew: skew
                               ,matrix: matrix};
 };
+Elm.GrowTextarea = Elm.GrowTextarea || {};
+Elm.GrowTextarea.make = function (_elm) {
+   "use strict";
+   _elm.GrowTextarea = _elm.GrowTextarea || {};
+   if (_elm.GrowTextarea.values) return _elm.GrowTextarea.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {    var _p0 = action;return _U.update(model,{text: _p0._0});});
+   var UpdateText = function (a) {    return {ctor: "UpdateText",_0: a};};
+   var init = function (t) {    return {text: t};};
+   var Model = function (a) {    return {text: a};};
+   var targetInnerHTML = A2($Json$Decode.at,_U.list(["target","innerHTML"]),$Json$Decode.string);
+   var view = F3(function (address,model,styles) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("textarea")
+              ,$Html$Attributes.contenteditable(true)
+              ,$Html$Attributes.style(styles)
+              ,A3($Html$Events.on,"input",targetInnerHTML,function (v) {    return A2($Signal.message,address,UpdateText(v));})]),
+      _U.list([$Html.text(model.text)]));
+   });
+   return _elm.GrowTextarea.values = {_op: _op,targetInnerHTML: targetInnerHTML,Model: Model,init: init,UpdateText: UpdateText,update: update,view: view};
+};
 Elm.Utils = Elm.Utils || {};
 Elm.Utils.make = function (_elm) {
    "use strict";
@@ -10968,10 +11000,10 @@ Elm.Education.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $GrowTextarea = Elm.GrowTextarea.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -10980,38 +11012,41 @@ Elm.Education.make = function (_elm) {
    $Styles = Elm.Styles.make(_elm),
    $Utils = Elm.Utils.make(_elm);
    var _op = {};
-   var initEducation = function (id) {    return {id: id,school: "Boston College",description: "BA Philosophy and Physics",timespan: "2006 - 2010"};};
+   var initEducation = function (id) {
+      return {id: id
+             ,school: $GrowTextarea.init("Boston College")
+             ,description: $GrowTextarea.init("BA Philosophy and Physics")
+             ,timespan: $GrowTextarea.init("2006 - 2010")};
+   };
    var model = _U.list([initEducation(0)]);
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "Update": var _p1 = _p0._0;
            var newModel = A4($Debug.log,"new model: ",$List.map,function (v) {    return _U.eq(v.id,_p1.id) ? _p1 : v;},model);
-           var test = A2($Debug.log,"update ",_p1);
            return newModel;
          case "Remove": var _p2 = _p0._0;
            var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p2);},model);
            var test = A2($Debug.log,"removing id: ",_p2);
            return removeModel;
-         default: var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
+         case "Add": var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
+           return newModel;
+         default: var _p3 = _p0._0;
+           var newSchool = A2($GrowTextarea.update,_p0._1,_p3.school);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p3.id) ? _U.update(_p3,{school: newSchool}) : v;},model);
            return newModel;}
    });
    var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});
+   var UpdateSchool = F2(function (a,b) {    return {ctor: "UpdateSchool",_0: a,_1: b};});
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
-   var Update = function (a) {    return {ctor: "Update",_0: a};};
-   var targetInnerHTML = A2($Json$Decode.at,_U.list(["target","innerHTML"]),$Json$Decode.string);
    var educationRow = F2(function (address,item) {
+      var commonStyle = $Html$Attributes.style(_U.list([]));
       var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
       return A2($Html.li,
       _U.list([]),
-      _U.list([A2($Html.div,
-              _U.list([$Html$Attributes.$class("textarea")
-                      ,$Html$Attributes.contenteditable(true)
-                      ,$Html$Attributes.style(A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
-                      ,A3($Html$Events.on,"input",targetInnerHTML,function (v) {    return A2($Signal.message,address,Update(_U.update(item,{school: v})));})]),
-              _U.list([$Html.text(item.school)]))
+      _U.list([A3($GrowTextarea.view,A2($Signal.forwardTo,address,UpdateSchool(item)),item.school,A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
               ,A2($Html.button,
               _U.list([A2($Html$Events.onClick,address,Remove(item.id))]),
               _U.list([$Html.text(A2($Basics._op["++"],"delete ",$Basics.toString(item.id)))]))]));
@@ -11026,11 +11061,12 @@ Elm.Education.make = function (_elm) {
               ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
+   var Update = function (a) {    return {ctor: "Update",_0: a};};
    return _elm.Education.values = {_op: _op
-                                  ,targetInnerHTML: targetInnerHTML
                                   ,Update: Update
                                   ,Remove: Remove
                                   ,Add: Add
+                                  ,UpdateSchool: UpdateSchool
                                   ,Education: Education
                                   ,initEducation: initEducation
                                   ,model: model

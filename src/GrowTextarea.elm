@@ -3,6 +3,13 @@ module GrowTextarea (..) where
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode exposing (..)
+
+
+targetInnerHTML : Json.Decode.Decoder String
+targetInnerHTML =
+  at [ "target", "innerHTML" ] Json.Decode.string
+
 
 
 {-
@@ -11,25 +18,23 @@ div selector, get the data we need to calculate the growth in js, and send back 
 
 our scrollHeight port should be numLines because that's all we need to know.
 -}
-
-
-port scrollHeight : Signal Int
-sigmodel =
-  Signal.foldp update (init "happiness") (Signal.map GrowTextarea scrollHeight)
-
-
-port sendSelector : Signal Model
-port sendSelector =
-  sigmodel
+-- port scrollHeight : Signal Int
+-- sigmodel =
+--   Signal.foldp update (init "happiness") (Signal.map GrowTextarea scrollHeight)
+--
+--
+-- port sendSelector : Signal Model
+-- port sendSelector =
+--   sigmodel
 
 
 type alias Model =
-  { text : String, numLines : Int, numCols : Int, growSelector : String }
+  { text : String }
 
 
 init : String -> Model
 init t =
-  { text = t, numLines = 2, numCols = 20, growSelector = "my-text-area" }
+  { text = t }
 
 
 
@@ -38,7 +43,6 @@ init t =
 
 type Action
   = UpdateText String
-  | GrowTextarea Int
 
 
 update : Action -> Model -> Model
@@ -47,37 +51,16 @@ update action model =
     UpdateText t ->
       { model | text = t }
 
-    GrowTextarea newScrollHeight ->
-      let
-        test =
-          Debug.log "rows: " newScrollHeight
-      in
-        model
 
-
-view : Signal.Address Action -> Model -> Html
-view address model =
-  let
-    sh =
-      Debug.log "scroll height: " scrollHeight
-  in
-    div
-      [ class "textarea"
-      , contenteditable True
-      ]
-      []
-
-
-
--- textarea
---   [ id model.growSelector
---   , value model.text
---     -- , rows model.numLines
---     -- , cols model.numCols
---   , onKeyUp address (\_ -> GrowTextarea 33)
---   , on
---       "input"
---       targetValue
---       (\v -> Signal.message address (UpdateText v))
---   ]
---   []
+view : Signal.Address Action -> Model -> List ( String, String ) -> Html
+view address model styles =
+  div
+    [ class "textarea"
+    , contenteditable True
+    , style styles
+    , on
+        "input"
+        targetInnerHTML
+        (\v -> Signal.message address (UpdateText v))
+    ]
+    [ text model.text ]

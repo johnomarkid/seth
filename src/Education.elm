@@ -4,27 +4,16 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Style exposing (..)
+import GrowTextarea exposing (..)
 import Utils
 import Styles
-import Json.Encode exposing (..)
-import Json.Decode exposing (..)
-
-
---import VirtualDom
--- innerHtml : String -> Attribute
--- innerHtml =
---   VirtualDom.property "innerHTML" << Json.Encode.string
-
-
-targetInnerHTML : Json.Decode.Decoder String
-targetInnerHTML =
-  at [ "target", "innerHTML" ] Json.Decode.string
 
 
 type Action
   = Update Education
   | Remove Int
   | Add
+  | UpdateSchool Education GrowTextarea.Action
 
 
 type alias Model =
@@ -33,18 +22,18 @@ type alias Model =
 
 type alias Education =
   { id : Int
-  , school : String
-  , description : String
-  , timespan : String
+  , school : GrowTextarea.Model
+  , description : GrowTextarea.Model
+  , timespan : GrowTextarea.Model
   }
 
 
 initEducation : Int -> Education
 initEducation id =
   { id = id
-  , school = "Boston College"
-  , description = "BA Philosophy and Physics"
-  , timespan = "2006 - 2010"
+  , school = GrowTextarea.init "Boston College"
+  , description = GrowTextarea.init "BA Philosophy and Physics"
+  , timespan = GrowTextarea.init "2006 - 2010"
   }
 
 
@@ -58,9 +47,6 @@ update action model =
   case action of
     Update item ->
       let
-        test =
-          Debug.log "update " item
-
         newModel =
           Debug.log
             "new model: "
@@ -96,25 +82,50 @@ update action model =
       in
         newModel
 
+    UpdateSchool item subAction ->
+      let
+        newSchool =
+          GrowTextarea.update subAction item.school
+
+        newModel =
+          List.map
+            (\v ->
+              if v.id == item.id then
+                { item | school = newSchool }
+              else
+                v
+            )
+            model
+      in
+        newModel
+
 
 educationRow : Signal.Address Action -> Education -> Html
 educationRow address item =
   let
     linespace =
       [ Style.marginBottom (px 10) ]
+
+    commonStyle =
+      style
+        []
   in
     li
       []
-      [ div
-          [ class "textarea"
-          , contenteditable True
-          , style (Styles.panelItemHeader ++ linespace)
-          , on
-              "input"
-              targetInnerHTML
-              (\v -> Signal.message address (Update { item | school = v }))
-          ]
-          [ text item.school ]
+      [ GrowTextarea.view
+          (Signal.forwardTo address (UpdateSchool item))
+          item.school
+          (Styles.panelItemHeader ++ linespace)
+        -- [ div
+        --     [ class "textarea"
+        --     , contenteditable True
+        --     , style (Styles.panelItemHeader ++ linespace)
+        --     , on
+        --         "input"
+        --         targetInnerHTML
+        --         (\v -> Signal.message address (Update { item | school = v }))
+        --     ]
+        --     [ text item.school ]
         -- , div
         --     [ class "textarea"
         --     , contenteditable True
