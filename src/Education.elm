@@ -10,10 +10,11 @@ import Styles
 
 
 type Action
-  = Update Education
-  | Remove Int
+  = Remove Int
   | Add
   | UpdateSchool Education GrowTextarea.Action
+  | UpdateDescription Education GrowTextarea.Action
+  | UpdateTimespan Education GrowTextarea.Action
 
 
 type alias Model =
@@ -45,27 +46,8 @@ model =
 update : Action -> Model -> Model
 update action model =
   case action of
-    Update item ->
-      let
-        newModel =
-          Debug.log
-            "new model: "
-            List.map
-            (\v ->
-              if v.id == item.id then
-                item
-              else
-                v
-            )
-            model
-      in
-        newModel
-
     Remove id ->
       let
-        test =
-          Debug.log "removing id: " id
-
         removeModel =
           List.filter (\data -> data.id /= id) model
       in
@@ -84,14 +66,48 @@ update action model =
 
     UpdateSchool item subAction ->
       let
-        newSchool =
+        newStuff =
           GrowTextarea.update subAction item.school
 
         newModel =
           List.map
             (\v ->
               if v.id == item.id then
-                { item | school = newSchool }
+                { item | school = newStuff }
+              else
+                v
+            )
+            model
+      in
+        newModel
+
+    UpdateDescription item subAction ->
+      let
+        newStuff =
+          GrowTextarea.update subAction item.description
+
+        newModel =
+          List.map
+            (\v ->
+              if v.id == item.id then
+                { item | description = newStuff }
+              else
+                v
+            )
+            model
+      in
+        newModel
+
+    UpdateTimespan item subAction ->
+      let
+        newStuff =
+          GrowTextarea.update subAction item.timespan
+
+        newModel =
+          List.map
+            (\v ->
+              if v.id == item.id then
+                { item | timespan = newStuff }
               else
                 v
             )
@@ -104,7 +120,7 @@ educationRow : Signal.Address Action -> Education -> Html
 educationRow address item =
   let
     linespace =
-      [ Style.marginBottom (px 10) ]
+      [ Style.marginBottom (px 0) ]
 
     commonStyle =
       style
@@ -116,36 +132,14 @@ educationRow address item =
           (Signal.forwardTo address (UpdateSchool item))
           item.school
           (Styles.panelItemHeader ++ linespace)
-        -- [ div
-        --     [ class "textarea"
-        --     , contenteditable True
-        --     , style (Styles.panelItemHeader ++ linespace)
-        --     , on
-        --         "input"
-        --         targetInnerHTML
-        --         (\v -> Signal.message address (Update { item | school = v }))
-        --     ]
-        --     [ text item.school ]
-        -- , div
-        --     [ class "textarea"
-        --     , contenteditable True
-        --     , style (Styles.panelDescription ++ linespace)
-        --     , on
-        --         "input"
-        --         targetValue
-        --         (\v -> Signal.message address (Update { item | description = v }))
-        --     ]
-        --     [ text item.description ]
-        -- , div
-        --     [ class "textarea"
-        --     , contenteditable True
-        --     , style (Styles.panelDescription ++ linespace)
-        --     , on
-        --         "input"
-        --         target
-        --         (\v -> Signal.message address (Update { item | timespan = v }))
-        --     ]
-        --     [ text item.timespan ]
+      , GrowTextarea.view
+          (Signal.forwardTo address (UpdateDescription item))
+          item.description
+          (Styles.panelDescription ++ linespace)
+      , GrowTextarea.view
+          (Signal.forwardTo address (UpdateTimespan item))
+          item.timespan
+          (Styles.panelDescription ++ linespace)
       , button [ onClick address (Remove item.id) ] [ text ("delete " ++ (toString item.id)) ]
       ]
 

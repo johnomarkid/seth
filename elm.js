@@ -11022,31 +11022,41 @@ Elm.Education.make = function (_elm) {
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
-      {case "Update": var _p1 = _p0._0;
-           var newModel = A4($Debug.log,"new model: ",$List.map,function (v) {    return _U.eq(v.id,_p1.id) ? _p1 : v;},model);
-           return newModel;
-         case "Remove": var _p2 = _p0._0;
-           var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p2);},model);
-           var test = A2($Debug.log,"removing id: ",_p2);
+      {case "Remove": var removeModel = A2($List.filter,function (data) {    return !_U.eq(data.id,_p0._0);},model);
            return removeModel;
          case "Add": var lastID = function (_) {    return _.id;}($Utils.fromJust($List.head(model)));
            var newModel = A2($List._op["::"],initEducation(lastID + 1),model);
            return newModel;
+         case "UpdateSchool": var _p1 = _p0._0;
+           var newStuff = A2($GrowTextarea.update,_p0._1,_p1.school);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p1.id) ? _U.update(_p1,{school: newStuff}) : v;},model);
+           return newModel;
+         case "UpdateDescription": var _p2 = _p0._0;
+           var newStuff = A2($GrowTextarea.update,_p0._1,_p2.description);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p2.id) ? _U.update(_p2,{description: newStuff}) : v;},model);
+           return newModel;
          default: var _p3 = _p0._0;
-           var newSchool = A2($GrowTextarea.update,_p0._1,_p3.school);
-           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p3.id) ? _U.update(_p3,{school: newSchool}) : v;},model);
+           var newStuff = A2($GrowTextarea.update,_p0._1,_p3.timespan);
+           var newModel = A2($List.map,function (v) {    return _U.eq(v.id,_p3.id) ? _U.update(_p3,{timespan: newStuff}) : v;},model);
            return newModel;}
    });
    var Education = F4(function (a,b,c,d) {    return {id: a,school: b,description: c,timespan: d};});
+   var UpdateTimespan = F2(function (a,b) {    return {ctor: "UpdateTimespan",_0: a,_1: b};});
+   var UpdateDescription = F2(function (a,b) {    return {ctor: "UpdateDescription",_0: a,_1: b};});
    var UpdateSchool = F2(function (a,b) {    return {ctor: "UpdateSchool",_0: a,_1: b};});
    var Add = {ctor: "Add"};
    var Remove = function (a) {    return {ctor: "Remove",_0: a};};
    var educationRow = F2(function (address,item) {
       var commonStyle = $Html$Attributes.style(_U.list([]));
-      var linespace = _U.list([$Style.marginBottom($Style.px(10))]);
+      var linespace = _U.list([$Style.marginBottom($Style.px(0))]);
       return A2($Html.li,
       _U.list([]),
       _U.list([A3($GrowTextarea.view,A2($Signal.forwardTo,address,UpdateSchool(item)),item.school,A2($Basics._op["++"],$Styles.panelItemHeader,linespace))
+              ,A3($GrowTextarea.view,
+              A2($Signal.forwardTo,address,UpdateDescription(item)),
+              item.description,
+              A2($Basics._op["++"],$Styles.panelDescription,linespace))
+              ,A3($GrowTextarea.view,A2($Signal.forwardTo,address,UpdateTimespan(item)),item.timespan,A2($Basics._op["++"],$Styles.panelDescription,linespace))
               ,A2($Html.button,
               _U.list([A2($Html$Events.onClick,address,Remove(item.id))]),
               _U.list([$Html.text(A2($Basics._op["++"],"delete ",$Basics.toString(item.id)))]))]));
@@ -11061,12 +11071,12 @@ Elm.Education.make = function (_elm) {
               ,A2($Html.ul,_U.list([$Html$Attributes.style($Styles.panelTable)]),rows)
               ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,Add)]),_U.list([$Html.text("add new")]))]))]));
    });
-   var Update = function (a) {    return {ctor: "Update",_0: a};};
    return _elm.Education.values = {_op: _op
-                                  ,Update: Update
                                   ,Remove: Remove
                                   ,Add: Add
                                   ,UpdateSchool: UpdateSchool
+                                  ,UpdateDescription: UpdateDescription
+                                  ,UpdateTimespan: UpdateTimespan
                                   ,Education: Education
                                   ,initEducation: initEducation
                                   ,model: model
