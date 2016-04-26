@@ -1,5 +1,9 @@
 
 
+## To note:
+- contenteditable divs are broken when trying to listen for on "input". the cursor
+moves to the beginning of the line. see: https://github.com/evancz/virtual-dom/pull/38
+
 ##To learn:
 
 1) how to style hover states and stuff

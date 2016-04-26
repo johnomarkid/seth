@@ -10,13 +10,15 @@
         <script src="elm.js"></script>
         <script>
 
-            var elmApp = Elm.fullscreen(Elm.Main, {scrollHeight: 55});
+            var elmApp = Elm.fullscreen(Elm.Main);
 
-            elmApp.ports.scrollHeight.send(77);
-
-            elmApp.ports.sendSelector.subscribe(function(selector) {
-              console.log(selector);
-            });
+            // elmApp.ports.scrollHeight.send(77);
+            //
+            // elmApp.ports.sendSelector.subscribe(function(selector) {
+            //   var aTextArea = document.getElementById(selector.growSelector);
+            //
+            //   console.log(mop);
+            // });
         </script>
     </body>
 </html>
