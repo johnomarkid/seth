@@ -10988,23 +10988,29 @@ Elm.GrowTextarea.make = function (_elm) {
    });
    var GrowTextarea = {ctor: "GrowTextarea"};
    var UpdateText = function (a) {    return {ctor: "UpdateText",_0: a};};
-   var Model = F3(function (a,b,c) {    return {text: a,numLines: b,numCols: c};});
-   var scrollHeight = Elm.Native.Port.make(_elm).inboundSignal("scrollHeight",
-   "Int",
-   function (v) {
-      return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
-   });
-   var init = function (t) {    return {text: t,numLines: scrollHeight,numCols: 20};};
    var view = F2(function (address,model) {
-      var st = A2($Signal.map,$Debug.log("sh port"),model.numLines);
-      var sh = A2($Debug.log,"scroll height: ",scrollHeight);
+      var myspan = A3($Html.node,"span",_U.list([]),_U.list([$Html.text("hello world")]));
       return A2($Html.textarea,
-      _U.list([$Html$Attributes.value(model.text)
+      _U.list([$Html$Attributes.id("my-grow")
+              ,$Html$Attributes.value(model.text)
               ,A2($Html$Events.onKeyUp,address,function (_p1) {    return GrowTextarea;})
               ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,UpdateText(v));})]),
       _U.list([]));
    });
-   return _elm.GrowTextarea.values = {_op: _op,Model: Model,init: init,UpdateText: UpdateText,GrowTextarea: GrowTextarea,update: update,view: view};
+   var init = function (t) {    return {text: t,numLines: 20,numCols: 20};};
+   var Model = F3(function (a,b,c) {    return {text: a,numLines: b,numCols: c};});
+   var focusMailbox = $Signal.mailbox("");
+   var focus = Elm.Native.Port.make(_elm).outboundSignal("focus",function (v) {    return v;},focusMailbox.signal);
+   var addresses = {focus: focusMailbox.address};
+   return _elm.GrowTextarea.values = {_op: _op
+                                     ,focusMailbox: focusMailbox
+                                     ,addresses: addresses
+                                     ,Model: Model
+                                     ,init: init
+                                     ,UpdateText: UpdateText
+                                     ,GrowTextarea: GrowTextarea
+                                     ,update: update
+                                     ,view: view};
 };
 Elm.Education = Elm.Education || {};
 Elm.Education.make = function (_elm) {

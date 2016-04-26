@@ -9,7 +9,19 @@ import Html.Events exposing (..)
 --- test
 
 
-port scrollHeight : Signal Int
+focusMailbox : Signal.Mailbox String
+focusMailbox =
+  Signal.mailbox ""
+
+
+port focus : Signal String
+port focus =
+  focusMailbox.signal
+
+
+addresses =
+  { focus = focusMailbox.address
+  }
 
 
 
@@ -17,12 +29,12 @@ port scrollHeight : Signal Int
 
 
 type alias Model =
-  { text : String, numLines : Signal Int, numCols : Int }
+  { text : String, numLines : Int, numCols : Int }
 
 
 init : String -> Model
 init t =
-  { text = t, numLines = scrollHeight, numCols = 20 }
+  { text = t, numLines = 20, numCols = 20 }
 
 
 
@@ -54,14 +66,12 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
-    sh =
-      Debug.log "scroll height: " scrollHeight
-
-    st =
-      (Signal.map (Debug.log "sh port") model.numLines)
+    myspan =
+      node "span" [] [ text "hello world" ]
   in
     textarea
-      [ value model.text
+      [ id "my-grow"
+      , value model.text
         -- , rows model.numLines
         -- , cols model.numCols
       , onKeyUp address (\_ -> GrowTextarea)
