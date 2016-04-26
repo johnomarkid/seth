@@ -13,16 +13,30 @@ port scrollHeight : Signal Int
 
 
 
----test
+{-
+every time scrollHeight changes we will call growtextarea. but we want to send the
+div selector, get the data we need to calculate the growth in js, and send back numLines need in our model.
+
+our scrollHeight port should be numLines because that's all we need to know.
+-}
+
+
+sigmodel =
+  Signal.foldp update (init "happiness") (Signal.map GrowTextarea scrollHeight)
+
+
+port sendSelector : Signal Model
+port sendSelector =
+  sigmodel
 
 
 type alias Model =
-  { text : String, numLines : Signal Int, numCols : Int }
+  { text : String, numLines : Int, numCols : Int, growSelector : String }
 
 
 init : String -> Model
 init t =
-  { text = t, numLines = scrollHeight, numCols = 20 }
+  { text = t, numLines = 2, numCols = 20, growSelector = "my-text-area" }
 
 
 
@@ -31,7 +45,7 @@ init t =
 
 type Action
   = UpdateText String
-  | GrowTextarea
+  | GrowTextarea Int
 
 
 update : Action -> Model -> Model
@@ -40,13 +54,10 @@ update action model =
     UpdateText t ->
       { model | text = t }
 
-    GrowTextarea ->
+    GrowTextarea newScrollHeight ->
       let
-        myNode =
-          Debug.log "cols: " model.numCols
-
         test =
-          Debug.log "rows: " model.numLines
+          Debug.log "rows: " newScrollHeight
       in
         model
 
@@ -56,15 +67,13 @@ view address model =
   let
     sh =
       Debug.log "scroll height: " scrollHeight
-
-    st =
-      (Signal.map (Debug.log "sh port") model.numLines)
   in
     textarea
-      [ value model.text
+      [ id model.growSelector
+      , value model.text
         -- , rows model.numLines
         -- , cols model.numCols
-      , onKeyUp address (\_ -> GrowTextarea)
+      , onKeyUp address (\_ -> GrowTextarea 33)
       , on
           "input"
           targetValue
